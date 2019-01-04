@@ -1,0 +1,51 @@
+Mean Auth App
+
+Run Mongo DB locally:
+> "T:\Program Files 2\MongoDB\Server\4.0\bin\mongod.exe" --dbpath="T:\data\db"
+
+Install:
+-Nodejs
+-MongoDB
+-
+
+
+Create App Steps
+
+1. npm init
+    - enter init fields
+2. Modify newly created package.json to add dependencies
+    - (express, mongoose, bcrypt, cors, json web token, bodyparser, passport, passport-jwt)
+    - npm Install
+    - "require" them in yur root app file
+3. Node/Express boilerplate
+    - app=express()
+    - establish port and listen function
+4. Configure cors (Cross-origin resource sharing)- allows requests to skip the Same-origin policy and access resources from remote hosts
+    -any domain can acces it / potential security issue?
+    - (alternative) 
+        app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next(); });
+5. Configure router
+    - new folder and file to manage express routing
+    - dont forget import and export
+6. Set up back end endpoints in routes file (see previous step)
+7. Set Static path for front end
+8. connect to database in main app file?
+    - using mLab > ds046549.mlab.com:46549/meanauth -u krau1 -p MEkr!1101
+        + used options to include username and pw
+    - used mongoose, see API for connection and connection validation API
+9. create schema for database items and export to router
+10. create function to add someone in database 
+    - in route handler function call our database function add user, mongoos API 
+    - given new user object encrypt password with bcryptjs
+11. Auth - Create a stragety
+    +({pick back up @17:52} - explain in detail later...)
+    - with passport and jwt and bcypt
+    -protect profile route in router function add as second parameter, 
+        + passport.authenticate('jwt',{session:false})
+11.5. With the back end nearing completion decided to store in a git repo
+    - git init 
+    - gitignore, hide node mods and any secret info
+12. Create Angular 2 front end
