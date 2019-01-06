@@ -15,6 +15,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 
 /*Services*/
 import { ValidateService } from './services/validate.service';
+import { AuthService } from './services/auth.service';
+import { NgFlashMessagesModule } from 'ng-flash-messages';
 
 
 @NgModule({
@@ -31,9 +33,10 @@ import { ValidateService } from './services/validate.service';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgFlashMessagesModule.forRoot()
   ],
-  providers: [ValidateService],
+  providers: [ValidateService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

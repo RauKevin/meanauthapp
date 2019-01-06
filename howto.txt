@@ -73,4 +73,7 @@ Create App Steps
     - program the event function logic
     - create service to validate form info, ng g service ___, import then put in provideer []
     - use service put import then add obj to constructor
+    - additionally, create service to talk to backend, service auth
+        +httpclient and httpheaders 
+        + ... must subscribe to observables
 
