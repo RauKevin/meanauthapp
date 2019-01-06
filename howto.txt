@@ -38,14 +38,39 @@ Create App Steps
     - used mongoose, see API for connection and connection validation API
 9. create schema for database items and export to router
 10. create function to add someone in database 
-    - in route handler function call our database function add user, mongoos API 
+    - in route handler function call our database function add user, mongoose API 
     - given new user object encrypt password with bcryptjs
-11. Auth - Create a stragety
-    +({pick back up @17:52} - explain in detail later...)
-    - with passport and jwt and bcypt
+11. Auth - Create a stragety with passport and jwt and bcypt
+    - existing user enter username and password
+        + bcrypt checks enter password agasit has store in DB
+        + if password match is sucessful establish session by creating a json web token to be returned to the client
+        + this token is checked when requrest specific pages through passport middleware(use to protect pasword route)
     -protect profile route in router function add as second parameter, 
         + passport.authenticate('jwt',{session:false})
 11.5. With the back end nearing completion decided to store in a git repo
     - git init 
+        + set up origin/ config username  and pw
     - gitignore, hide node mods and any secret info
+    - if starting project before repo 
+        + git clone ___
+        + git pull origin master --allow-unrelated-histories
 12. Create Angular 2 front end
+    - npm install -g @angular/cli then ng new <filename>
+    - in angular-cli.json file change outDir to the public folder 
+    - To start angular2 app > ng serve
+    - create component >ng g component <path/component_name> 
+    - create service ng g service <path/service_name>//services are providers and must add manually to app.module   
+    + css free assets: https://bootswatch.com, and getbootstrap/examples, CTRL+U to see source code
+12.1. Orginaize componets 
+12.2. Set up routing, including routing with creating the initail build gives us app-routing.module
+    - import the generate components and add to routes []
+    - replace href with [routerLink]="['/']"
+    - replace  <li class="nav-item active"> with [routerLinkActive]="['active']" and [routerLinkActiveOptions]="{exact:true}"
+12.3 Set up the component pages, navbar(see 12.2), home, dashb, reg and login
+12.4 Create the register form
+    - html form template
+    - inject 2-way data binding to input fields and add submit event
+    - program the event function logic
+    - create service to validate form info, ng g service ___, import then put in provideer []
+    - use service put import then add obj to constructor
+
