@@ -56,7 +56,7 @@ app.get('/',(req, res) => {
 
 //FIX LATER
 app.get('*',(req, res) => {
-    res.send({'myballs':'true'});
+    res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 app.listen(port, () => {

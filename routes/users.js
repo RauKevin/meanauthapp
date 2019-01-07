@@ -69,9 +69,14 @@ router.post('/auth', (req, res, next)=>{
 });
 
 // profile view
-router.get('/profile', (req, res, next)=>{
-    res.send('PROFILE ');
+/*
+router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next)=>{
+   res.json({user:req.user});
 });
+*/
+router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next)=>{
+    res.json({user:req.user});
+ });
 
 // validate
 router.get('/validate', (req, res, next)=>{

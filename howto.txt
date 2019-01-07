@@ -76,4 +76,14 @@ Create App Steps
     - additionally, create service to talk to backend, service auth
         +httpclient and httpheaders 
         + ... must subscribe to observables
+12.5 Authenticate login
+    - form to capture username/pw
+    - send userdata to server auth endpoint and recieve auth token
+    - store auth token in localstorage 
+        + //angular-jwt to validate token looks for 'id_token'
+        + local storage can only store strings, so JSON.stringify()
+    -logout function - clr localstorage, nav to login
+12.6 Make protected authentited requests (authentication guard)
+    - send in the header
+    - in client-src folder npm install @auth0/angular-jwt --save, checks the token at protected paths
 
