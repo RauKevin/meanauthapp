@@ -41,9 +41,11 @@ const port = 3000;
 // middleware
 app.use(cors());        //to request web assets from another server
 app.use(bodyParser.json());     //stripe off headers?
-app.use(passport.initialize());  //authentication middle ware ?
+
+app.use(passport.initialize());  //authentication middleware 
 app.use(passport.session());  // :____________
 require('./config/passport')(passport);
+
 app.use('/users', users);
 
 //set Static folder for front end?

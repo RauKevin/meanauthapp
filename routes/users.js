@@ -46,13 +46,28 @@ router.post('/auth', (req, res, next)=>{
             if(err) throw err;
             console.log(user);
             if(isMatch){
+                //payload is returned user object from User? synchronous
                 const token = jwt.sign(user.toJSON(), config.secret, {
                     expiresIn: 604800
                 });
                 console.log('password match!');
+                //console.log(token);
+                console.log(typeof token);
+
+                //test the token?
+                jwt.verify(token, config.secret, (err, user)=>{
+                    if(err) {
+                        console.log('token verification error:' +err);
+                    } else {
+                        console.log('Token is verifiable');    
+                        console.log(user);
+                    }
+                });
+
                 res.json({
                     success: true,
-                    token: 'JWT '+token,
+                    token: 'bearer '+token,
+                    //token: 'JWT '+token,
                     user: {
                         id: user._id,
                         name: user.name,

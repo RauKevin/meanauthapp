@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-//import { JwtHelperService } from '@auth0/angular-jwt';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +10,7 @@ export class AuthService {
   authToken:any;
   user:any;
 
-  constructor(private http:HttpClient, 
-    //private jwtHelper: JwtHelperService
-    ) { }
+  constructor(private http:HttpClient) { }
 
   registerUser(user){
     const httpOptions = {
@@ -35,6 +33,8 @@ export class AuthService {
 
   getProfile(){
     this.loadToken();
+    console.log(this.authToken);
+    console.log(typeof this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
@@ -50,7 +50,8 @@ export class AuthService {
   }
 
   storeUserData(token: any, user: any): any {
-    localStorage.setItem('id_token', token); 
+    console.log(typeof token);
+    localStorage.setItem('id_token',token); 
     localStorage.setItem('user', JSON.stringify(user));
     this.authToken = token;
     this.user = user;
@@ -59,17 +60,15 @@ export class AuthService {
   loggedIn(){
     //return tokenNotExpired();
     const myRawToken = localStorage.getItem('id_token');
-    //const helper = new JwtHelperService();
+    const helper = new JwtHelperService();
     if(myRawToken)
     {
-      return true;
-      /*
+      //return true;
       const isExpired = helper.isTokenExpired(myRawToken);
       if(!isExpired)
       {
         return true;
       }
-      */
     }
     return false;
   }

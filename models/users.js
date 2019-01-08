@@ -45,6 +45,7 @@ module.exports.addUser = function(newUser, callback)
 // Mongoose API wrapper find user by ID
 module.exports.getUserById = function(id, callback)
 {
+    console.log('get user by id attempted');
     User.findById(id,callback);
 }
 
