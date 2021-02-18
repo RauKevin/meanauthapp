@@ -11,8 +11,10 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
 
-  name: string;
-  username: string;
+  firstname: string;
+  lastname: string;
+  id: number;
+  type: string;
   password: string;
   email: string;
   data:any;
@@ -30,29 +32,30 @@ export class RegisterComponent implements OnInit {
   onRegisterSubmit()
   {
     console.log("registration submit event activated");
-    const user = {
-      name: this.name,
-      email: this.email,
-      username: this.username,
-      password: this.password
+    let user = {
+      FirstName: this.firstname,
+      LastName: this.lastname,
+      Id: this.id,
+      Type: this.type,
+      Email: this.email,
+      Password: this.password,
+      StudentID: null,
+      FacultyID: null,
     };
+    console.log(user);
 
     //required fields
-    if(!this.validateService.validateRegister(user)){
+    if (!this.validateService.validateRegister(user)) {
       console.log('Please complete all fields to register');
       this.ngFlashMessageService.showFlashMessage({
-        // Array of messages each will be displayed in new line
         messages: ["Please complete all fields to register"], 
-        // Whether the flash can be dismissed by the user defaults to false
         dismissible: true, 
-        // Time after which the flash disappears defaults to 2000ms
         timeout: false,
-        // Type of flash message, it defaults to info and success, warning, danger types can also be used
         type: 'danger'
       });
       return false;
     }
-    if(!this.validateService.validateEmail(user.email)){
+    if (!this.validateService.validateEmail(user.Email)) {
       console.log('Please enter a valid email');
       this.ngFlashMessageService.showFlashMessage({
         messages: ['Please enter a valid email'], 
@@ -63,10 +66,16 @@ export class RegisterComponent implements OnInit {
       return false;
     }
 
-    //register user
+    if (user.Type == "faculty") {
+      user.FacultyID = user.Id;
+    } else {
+      user.StudentID = user.Id;
+    }
+
+    // register user
     this.authService.registerUser(user).subscribe(resdata => {
       this.data = resdata; 
-      if(this.data.success) {
+      if (this.data.success) {
         this.ngFlashMessageService.showFlashMessage({
           messages: ['You are now registered, You may now login'], 
           dismissible: true, 
@@ -74,8 +83,7 @@ export class RegisterComponent implements OnInit {
           type: 'success'
         });
         this.router.navigate(['/login']);
-      }
-      else {
+      } else {
         this.ngFlashMessageService.showFlashMessage({
           messages: ['Error: Something went wrong, Please try again later'], 
           dismissible: true, 

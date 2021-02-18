@@ -3,64 +3,44 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
-const mongoose = require('mongoose');
 const config = require('./config/database');
+const api = require('./routes/api');
+const db = require('./dbConnect');
 
-//connect to mongoDB
-/*
-mongoose.connect(config.database);
-mongoose.connection.on('connected', ()=>{
-    console.log("connected to db");
-});
-mongoose.connection.on('error', (err)=>{
-    console.log("db error: "+err);
-});
-*/
-//var db = mongoose.createConnection(config.uri, config.database, config.port, config.opts);
-/*
-mongoose.connect(config.uri, config.opts, ()=>{
-    console.log('connecting to db...');
-});
-*/
-//{ useNewUrlParser: true }
-mongoose.connect(config.uri, ()=>{
-    console.log('connecting to db...for reals this time');
-});
-mongoose.connection.on('error', (err)=>{ 
-    console.log("db error: "+err);
-});
+//connect to db - switch to pooling?
+db.pgClientConnect();
+//https://node-postgres.com/api/client
 
 
 //set up express app
 const app = express();
 
-const users = require('./routes/users');
-
 const port = 3000;
 
 // middleware
 app.use(cors());        //to request web assets from another server
-app.use(bodyParser.json());     //stripe off headers?
+app.use(bodyParser.urlencoded({ extended: true })) // parse application/x-www-form-urlencoded
+app.use(bodyParser.json());
 
-app.use(passport.initialize());  //authentication middleware 
-app.use(passport.session());  // :____________
+app.use(passport.initialize());
+app.use(passport.session());
 require('./config/passport')(passport);
 
-app.use('/users', users);
+// the /users is the path before the pathes specified in users.js
+app.use('/api', api);
 
 //set Static folder for front end?
 app.use(express.static(path.join(__dirname, 'public')));
 
-//test: get request / index
-app.get('/',(req, res) => {
-    res.send({'myballs':'true'});
-});
+// //test: get request / index
+// app.get('/',(req, res) => {
+//     res.send({'myballs':'true'});
+// });
 
-//FIX LATER
 app.get('*',(req, res) => {
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 app.listen(port, () => {
-    console.log('Sever starting on port '+port);
+    console.log('Server starting on port ' + port);
 });

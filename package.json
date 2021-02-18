@@ -8,14 +8,14 @@
     "start": "node app"
   },
   "dependencies": {
-    "express": "*",
-    "mongoose": "*",
     "bcryptjs": "*",
+    "body-parser": "^1.19.0",
     "cors": "*",
+    "express": "*",
     "jsonwebtoken": "*",
-    "body-parser": "*",
     "passport": "*",
-    "passport-jwt": "*"
+    "passport-jwt": "*",
+    "pg": "*"
   },
   "author": "Kevin",
   "license": "ISC"

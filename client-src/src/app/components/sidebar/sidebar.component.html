@@ -1,0 +1,25 @@
+<!-- Professor View -->
+<!-- <div>
+  <ul>
+    <li>Dashboard</li>
+    <li>Add Availability</li>
+    <li>View Appointments</li>
+  </ul>
+</div> -->
+
+
+<!-- Student View -->
+<div>
+
+</div>
+
+<!--Test-->
+<div id="mySidebar" class="sidebar">
+  <button class="openbtn" (click)="toogleNav()">☰ </button>
+  <div *ngIf="showSidebar">
+    <a [routerLink]="['/dashboard']">Dashboard</a>
+    <a href="#">Add Availability</a>
+    <a href="#">View Appointments</a>
+    <a href="#">Help</a>
+  </div>
+</div>

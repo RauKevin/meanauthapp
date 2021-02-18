@@ -9,9 +9,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  username:string;
-  password:string;
-  data:any;
+  email: string;
+  password: string;
+  data: any;
   
   constructor(
     private ngFlashMessageService: NgFlashMessageService,
@@ -22,16 +22,19 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  onLoginSubmit(){
-    console.log(this.username + ' login attempt');
+  onLoginSubmit() {
+    console.log(this.email + ' login attempt');
     const user = {
-      username: this.username,
-      password: this.password
+      Email: this.email,
+      Password: this.password
     };
 
+    //not going to validate here? ok
+
     this.authService.authenticateUser(user).subscribe(data => {
+      console.log(data);
       this.data = data;
-      if(this.data.success){
+      if (this.data.success) {
         this.authService.storeUserData(this.data.token, this.data.user);
 
         this.ngFlashMessageService.showFlashMessage({
@@ -41,15 +44,14 @@ export class LoginComponent implements OnInit {
           type: 'success'
         });
         this.router.navigate(['/dashboard']);
-      }
-      else{
+      } else {
         this.ngFlashMessageService.showFlashMessage({
           messages: [this.data.msg], 
           dismissible: true, 
           timeout: 3000,
           type: 'danger'
         });
-        this.router.navigate(['/login']);
+        this.router.navigate(['/login']); //redundant?
 
       }
     });

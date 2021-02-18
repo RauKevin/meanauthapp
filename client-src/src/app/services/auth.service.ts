@@ -19,19 +19,21 @@ export class AuthService {
         //'Authorization': 'my-auth-token'
       })
     };
-    return this.http.post('http://localhost:3000/users/register', user, httpOptions);  
+
+    return this.http.post('http://localhost:3000/api/register', user, httpOptions);  
   }
 
-  authenticateUser(user){
+  authenticateUser(user) {
+    console.log(user);
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type': 'application/json'
       })
     };
-    return this.http.post('http://localhost:3000/users/auth', user, httpOptions);  
+    return this.http.post('http://localhost:3000/api/auth', user, httpOptions);
   }
 
-  getProfile(){
+  getProfile() {
     this.loadToken();
     console.log(this.authToken);
     console.log(typeof this.authToken);
@@ -41,25 +43,31 @@ export class AuthService {
         'Authorization': this.authToken
       })
     };
-    return this.http.get('http://localhost:3000/users/profile', httpOptions);  
+    //return this.http.get('http://localhost:3000/users/profile', httpOptions);  
   }
 
-  loadToken(){
+  loadToken() {
     const token = localStorage.getItem('id_token');
     this.authToken = token;
   }
 
   storeUserData(token: any, user: any): any {
     console.log(typeof token);
-    localStorage.setItem('id_token',token); 
+    localStorage.setItem('id_token', token); 
     localStorage.setItem('user', JSON.stringify(user));
     this.authToken = token;
     this.user = user;
   }
 
-  loggedIn(){
+  /**
+   * You need to fix the logged in view. 
+   * Leaving the site and returning shows you are loggedIn but view have both logged in and out stuff
+   */
+  loggedIn() {
     //return tokenNotExpired();
+    //localStorage.clear();
     const myRawToken = localStorage.getItem('id_token');
+    console.log(myRawToken);
     const helper = new JwtHelperService();
     if(myRawToken)
     {
@@ -73,10 +81,14 @@ export class AuthService {
     return false;
   }
 
-  logout(){
+  logout() {
     this.authToken = null;
     this.user = null;
     localStorage.clear();
+  }
+
+  getUser() {
+    return this.user;
   }
 
 }

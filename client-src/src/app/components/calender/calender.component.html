@@ -1,0 +1,57 @@
+<mwl-calendar-header 
+  [(view)]="view" 
+  [(viewDate)]="viewDate"
+  [(hourBlock)]="hourBlock"
+>
+</mwl-calendar-header>
+
+<!-- <div class="alert alert-info">
+  Click on a day or time slot on the view.
+  <strong *ngIf="clickedDate">You clicked on this time: {{ clickedDate | date:'medium' }}</strong>
+  <strong *ngIf="clickedColumn != null">You clicked on this column: {{ clickedColumn }}</strong>
+</div> -->
+<div class="text-center" style="margin-bottom: 20px;">
+  <button type="button" class="btn btn-lg" (click)="onSubmit(mytemplate)" style="background-color: blue; color: white;">Submit Availability</button>
+</div>
+
+<div [ngSwitch]="view">
+  <mwl-calendar-month-view
+    *ngSwitchCase="'month'"
+    [viewDate]="viewDate"
+    [events]="events"
+  >
+  </mwl-calendar-month-view>
+  <mwl-calendar-week-view
+    *ngSwitchCase="'week'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [hourSegments] = "hourBlock"
+    [dayStartHour]="8"
+    [dayEndHour]="17"
+    (beforeViewRender)="beforeWeekOrDayViewRender($event)"
+    (hourSegmentClicked)="hourSegmentClicked($event.date)"
+  >
+  <!-- 
+  (beforeViewRender)="beforeWeekOrDayViewRender($event)"
+  (hourSegmentClicked)="hourSegmentClicked($event.date)" 
+  (dayHeaderClicked)="clickedDate = $event.day.date"
+  (hourSegmentClicked)="clickedDate = $event.date"
+  -->
+  </mwl-calendar-week-view>
+  <mwl-calendar-day-view
+    *ngSwitchCase="'day'"
+    [viewDate]="viewDate"
+    [events]="events"
+    (hourSegmentClicked)="clickedDate = $event.date"
+    [dayStartHour]="8"
+    [dayEndHour]="23"
+    [hourSegments] = "hourBlock"
+  >
+  <!-- (beforeViewRender)="beforeWeekOrDayViewRender($event)"
+  (hourSegmentClicked)="hourSegmentClicked($event.date)" -->
+  </mwl-calendar-day-view>
+</div>
+
+<ng-template #mytemplate>
+  <h1>It works {{ data.name }}</h1>
+</ng-template>

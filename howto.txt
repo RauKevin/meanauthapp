@@ -93,4 +93,5 @@ Create App Steps
         + ... after jwt.sign() ... token: 'bearer '+token,
 13. Build the application with ng build command
     -  In angular.json "outputPath": "../public",
+    - ng build, then you can navigate to the local host port of the server and complete your app
 
