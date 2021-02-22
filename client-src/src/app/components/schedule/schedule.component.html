@@ -1,0 +1,35 @@
+<mwl-calendar-header 
+  [(view)]="view" 
+  [(viewDate)]="viewDate"
+  [(hourBlock)]="hourBlock"
+>
+</mwl-calendar-header>
+<!--Update to make the apointment length select optional-->
+
+<div [ngSwitch]="view">
+  <mwl-calendar-month-view
+    *ngSwitchCase="'month'"
+    [viewDate]="viewDate"
+    [events]="events"
+  >
+  </mwl-calendar-month-view>
+  <mwl-calendar-week-view
+    *ngSwitchCase="'week'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [hourSegments] = "hourBlock"
+    [dayStartHour]="8"
+    [dayEndHour]="17"
+    (beforeViewRender)="beforeWeekOrDayViewRender($event)"
+  >
+  </mwl-calendar-week-view>
+  <mwl-calendar-day-view
+    *ngSwitchCase="'day'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [dayStartHour]="8"
+    [dayEndHour]="23"
+    [hourSegments] = "hourBlock"
+  >
+  </mwl-calendar-day-view>
+</div>

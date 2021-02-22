@@ -262,7 +262,18 @@ router.post('/admin/updateAppointments', (req, res, next) => {
             };
         }
     }
-})
+});
+
+router.post('/faculty', (req, res) => {
+    console.log("get Faculty");
+    user_model.getFaculty((faculty, err) => {
+        if (faculty) {
+            res.json({success: true, faculty: faculty});
+        } else {
+            res.json({success: false, msg: 'Database error', error: err});
+        }
+    });
+});
 
 module.exports = router;
 

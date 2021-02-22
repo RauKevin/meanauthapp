@@ -68,4 +68,20 @@ module.exports.validateUser = function (email, pw, cb) {
     });
 }
 
+module.exports.getFaculty = function (cb) {
+    let query = `
+        SELECT FacultyID, FirstName, LastName FROM "User" WHERE "FacultyID" IS NOT NULL;
+    `;
+    console.log(query);
+    client.query(query, (err, res) => {
+        if (err) {
+            console.log(err);
+            cb(null, err);
+        } else {
+            console.log(res.rows);
+            cb(res.rows, null);
+        }
+    });
+}
+
 //https://node-postgres.com/features/queries

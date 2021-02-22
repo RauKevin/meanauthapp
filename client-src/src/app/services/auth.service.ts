@@ -67,7 +67,7 @@ export class AuthService {
     //return tokenNotExpired();
     //localStorage.clear();
     const myRawToken = localStorage.getItem('id_token');
-    console.log(myRawToken);
+    // console.log(myRawToken);
     const helper = new JwtHelperService();
     if(myRawToken)
     {
@@ -89,6 +89,8 @@ export class AuthService {
 
   getUser() {
     return this.user;
+
+    //need a way to tell if faculty or student
   }
 
 }

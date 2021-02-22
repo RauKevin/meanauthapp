@@ -2,6 +2,7 @@
   [(view)]="view" 
   [(viewDate)]="viewDate"
   [(hourBlock)]="hourBlock"
+  [hourBlockToggle] = "true"
 >
 </mwl-calendar-header>
 
@@ -30,6 +31,7 @@
     [dayEndHour]="17"
     (beforeViewRender)="beforeWeekOrDayViewRender($event)"
     (hourSegmentClicked)="hourSegmentClicked($event.date)"
+    (eventClicked)="eventClicked($event)"
   >
   <!-- 
   (beforeViewRender)="beforeWeekOrDayViewRender($event)"
@@ -46,12 +48,9 @@
     [dayStartHour]="8"
     [dayEndHour]="23"
     [hourSegments] = "hourBlock"
+    (eventClicked)="eventClicked($event)"
   >
   <!-- (beforeViewRender)="beforeWeekOrDayViewRender($event)"
   (hourSegmentClicked)="hourSegmentClicked($event.date)" -->
   </mwl-calendar-day-view>
 </div>
-
-<ng-template #mytemplate>
-  <h1>It works {{ data.name }}</h1>
-</ng-template>
