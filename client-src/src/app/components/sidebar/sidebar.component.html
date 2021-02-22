@@ -18,8 +18,9 @@
   <button class="openbtn" (click)="toogleNav()">☰ </button>
   <div *ngIf="showSidebar">
     <a [routerLink]="['/dashboard']">Dashboard</a>
-    <a href="#">Add Availability</a>
-    <a href="#">View Appointments</a>
-    <a href="#">Help</a>
+    <a [routerLink]="['/generate']">Add Availability</a>
+    <a [routerLink]="['/schedule']">Schedule Appointments</a>
+    <a [routerLink]="['/view']">View Appointments</a>
+    <a [routerLink]="['/']">Help</a>
   </div>
 </div>

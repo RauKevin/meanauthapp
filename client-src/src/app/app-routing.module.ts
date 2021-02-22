@@ -8,16 +8,23 @@ import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
+import { MakeAppointmentComponent } from './components/make-appointment/make-appointment.component';
+import { ScheduleAppointmentComponent } from './components/schedule-appointment/schedule-appointment.component';
+import { ViewAppointmentComponent } from './components/view-appointment/view-appointment.component';
+
 /* Service imports */
 import { AuthGuard } from './guards/auth.guard';
 
-//make protected routes later
 const routes: Routes = [
-  {path:'', component: HomeComponent},
+  {path:'welcome', component: HomeComponent},
   {path:'register', component: RegisterComponent},
   {path:'login', component: LoginComponent},
+  {path:'', component: DashboardComponent, canActivate:[AuthGuard]},
   {path:'dashboard', component: DashboardComponent, canActivate:[AuthGuard]},
-  {path:'profile', component: ProfileComponent, canActivate:[AuthGuard]} //change password?
+  {path:'profile', component: ProfileComponent, canActivate:[AuthGuard]},
+  {path:'generate', component: MakeAppointmentComponent},
+  {path:'schedule', component: ScheduleAppointmentComponent},
+  {path:'view', component: ViewAppointmentComponent},
 ];
 
 @NgModule({

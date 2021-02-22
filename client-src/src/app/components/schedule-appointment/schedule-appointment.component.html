@@ -1,0 +1,29 @@
+<div class="" id="viewAptContainer">
+  <h2>Schedule an Appointment</h2>
+</div>
+<div class="row">
+  <div class="col-md-4" style="padding: 1.5em;">
+
+    <label for="professors">Faculty: </label>
+    <select id="professors" [(ngModel)]="selectedFaculty" (change)="facultyChange()">
+      <option value=""></option>
+      <option *ngFor="let fac of faculty" 
+          [value]="fac.FacultyID" 
+      >
+        {{fac.LastName}}, {{fac.FirstName}}
+      </option>
+    </select>
+
+    <br> <!--Change this to a row-->
+    <label for="aptTime">Time: </label>
+    <select id="aptTime">
+      <option></option>
+    </select>
+
+    <hr>
+  </div>
+  <!-- Change header for this view -->
+  <div class="col-md-8" style="padding: 2em; border: 1px solid black">
+    <app-schedule></app-schedule>
+  </div>
+</div>

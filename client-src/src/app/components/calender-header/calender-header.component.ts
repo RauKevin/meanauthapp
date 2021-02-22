@@ -3,84 +3,7 @@ import { CalendarView } from 'angular-calendar';
 
 @Component({
   selector: 'mwl-calendar-header',
-  template: `
-    <div class="d-flex flex-row-reverse">
-      <div class="">
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <label class="input-group-text" for="duration">Appointment Length</label>
-          </div>
-          <select class="custom-select" name="Duration" id="duration" 
-            (change)="hourBlockChange.emit($event.target.value)"
-          >
-            <option value="2">30mins</option>
-            <option value="1">1hr</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4">
-        <div class="btn-group">
-          <div
-            class="btn btn-primary"
-            mwlCalendarPreviousView
-            [view]="view"
-            [(viewDate)]="viewDate"
-            (viewDateChange)="viewDateChange.next(viewDate)"
-          >
-            Previous
-          </div>
-          <div
-            class="btn btn-outline-secondary"
-            mwlCalendarToday
-            [(viewDate)]="viewDate"
-            (viewDateChange)="viewDateChange.next(viewDate)"
-          >
-            Today
-          </div>
-          <div
-            class="btn btn-primary"
-            mwlCalendarNextView
-            [view]="view"
-            [(viewDate)]="viewDate"
-            (viewDateChange)="viewDateChange.next(viewDate)"
-          >
-            Next
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 text-center">
-        <h3>{{ viewDate | calendarDate: view + 'ViewTitle':locale }}</h3>
-      </div>
-      <div class="col-md-4 text-right">
-        <div class="btn-group">
-          <div
-            class="btn btn-primary"
-            (click)="viewChange.emit(CalendarView.Month)"
-            [class.active]="view === CalendarView.Month"
-          >
-            Month
-          </div>
-          <div
-            class="btn btn-primary"
-            (click)="viewChange.emit(CalendarView.Week)"
-            [class.active]="view === CalendarView.Week"
-          >
-            Week
-          </div>
-          <div
-            class="btn btn-primary"
-            (click)="viewChange.emit(CalendarView.Day)"
-            [class.active]="view === CalendarView.Day"
-          >
-            Day
-          </div>
-        </div>
-      </div>
-    </div>
-    <br />
-  `,
+  templateUrl: './calender-header.component.html',
 })
 export class CalenderHeaderComponent {
   @Input() view: CalendarView;
@@ -91,6 +14,8 @@ export class CalenderHeaderComponent {
 
   //take in a boolean param to display te appointment length
   @Input() hourBlock: number = 2;
+
+  @Input() hourBlockToggle: boolean = false;
 
   @Output() hourBlockChange = new EventEmitter<Number>();
 

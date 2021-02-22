@@ -35,6 +35,10 @@ import { Modal } from './modals/modal';
 
 import {MatDialogModule} from '@angular/material/dialog';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { MakeAppointmentComponent } from './components/make-appointment/make-appointment.component';
+import { ViewAppointmentComponent } from './components/view-appointment/view-appointment.component';
+import { ScheduleAppointmentComponent } from './components/schedule-appointment/schedule-appointment.component';
+import { ScheduleComponent } from './components/schedule/schedule.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +53,11 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     CalenderHeaderComponent,
     ModalTestComponent,
     Modal,
-    SidebarComponent
+    SidebarComponent,
+    MakeAppointmentComponent,
+    ViewAppointmentComponent,
+    ScheduleAppointmentComponent,
+    ScheduleComponent
   ],
   imports: [
     BrowserModule,

@@ -66,7 +66,7 @@ export class AppointmentService {
             */
             //IT gets the FacultyID from the looking up the token
             for (const dt of Array.from(dateTimes.values())) {
-                let date = new Date(dt);
+                let date = new Date(dt).toISOString();
                 apts.push({
                     Location: room,
                     StartTime: date,
@@ -87,5 +87,14 @@ export class AppointmentService {
             };
             return this.http.post('http://localhost:3000/api/createAppointments', apts, httpOptions);
         }
+    }
+
+    getFaculty() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.post('http://localhost:3000/api/faculty', {}, httpOptions);
     }
 }
