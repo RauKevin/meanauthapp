@@ -43,7 +43,11 @@ export class LoginComponent implements OnInit {
           timeout: 3000,
           type: 'success'
         });
-        this.router.navigate(['/dashboard']);
+        console.log(window.location.origin);
+        //window.location.href="yourpagedomain/login"
+        window.location.href=window.location.origin+"/dashboard";
+        //this.router.navigate(['/dashboard']);
+        console.log("operation after routing?");
       } else {
         this.ngFlashMessageService.showFlashMessage({
           messages: [this.data.msg], 

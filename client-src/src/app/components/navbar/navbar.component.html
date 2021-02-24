@@ -31,11 +31,18 @@
 </nav> -->
   <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="\">Toro Scheduler</a>
+        <a class="" href="\">
+          <img width="150px" src="https://www.csudh.edu/Assets/csudh-sites/brand/images/2018-06-18-csudh-logo-mark-on-white.png" />
+          <div class="navbar-brand">Toro Scheduler</div>
+        </a>
         <form class="d-flex">
             <!-- Register will likey be removed if using google login-->
             <button *ngIf="!authService.loggedIn()" class="btn btn-outline-success me-2" type="button" [routerLink]="['/register']">Register</button>
             <button *ngIf="!authService.loggedIn()" class="btn btn-outline-success me-2" type="button" [routerLink]="['/login']">Login</button>
+
+            <div *ngIf="authService.loggedIn()" id="userName">
+              {{lastname}}, {{firstname}}
+            </div>
             <button *ngIf="authService.loggedIn()" class="btn btn-outline-success me-2" type="button" (click)="onLogoutClick()">Logout</button>
         </form>
     </div>

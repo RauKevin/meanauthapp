@@ -194,6 +194,8 @@ router.post('/setAppointment', (req, res, next) => {
 
 router.post('/getAppointments', (req, res, next) => {
     console.log("get Appointments");
+    console.log(req.body);
+    //may need to account for empty strings as null
     let filter = [];
     if (typeof req.body.StartTime !== "undefined" && typeof req.body.EndTime !== "undefined") {
         filter.push({dateRange: [req.body.StartTime, req.body.EndTime]});

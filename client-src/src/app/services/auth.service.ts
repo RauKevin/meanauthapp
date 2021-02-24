@@ -88,8 +88,17 @@ export class AuthService {
   }
 
   getUser() {
-    return this.user;
+    if (this.user) {
+      return this.user;
+    }
 
+    const user = localStorage.getItem('user');
+    if (user) {
+      this.user = JSON.parse(user);
+      return this.user;
+    }
+    
+    return null;
     //need a way to tell if faculty or student
   }
 

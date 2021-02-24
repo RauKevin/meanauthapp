@@ -32,7 +32,7 @@ export class AppointmentService {
         if (typeof params.FacultyID !== "undefined" && params.FacultyID) {
             data.FacultyID = params.FacultyID;
         }
-        if (typeof params.StudentID !== "undefined" && params.StudentID) {
+        if (typeof params.StudentID !== "undefined" && params.StudentID !== null) {
             data.StudentID = params.StudentID;
         }
         if (typeof params.Open !== "undefined" && params.Open) {
@@ -49,7 +49,7 @@ export class AppointmentService {
         return this.http.post('http://localhost:3000/api/getAppointments', data, httpOptions);
     }
 
-    postAvailability(dateTimes:Set<any>, duration:Number, room:string): any {
+    postAvailability(dateTimes:Set<any>, facultyID:string, duration:Number, room:string): any {
         //I can get FacultyID from cookie?
         const token = localStorage.getItem('id_token');
         console.log(token);
@@ -70,7 +70,7 @@ export class AppointmentService {
                 apts.push({
                     Location: room,
                     StartTime: date,
-                    FacultyID: /*user.FacultyID*/ 999999999,
+                    FacultyID: facultyID,
                     Duration: duration,
                     Token: token
                 });

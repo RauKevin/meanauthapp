@@ -16,8 +16,18 @@ export class NavbarComponent implements OnInit {
     private router:Router
     ) { }
 
+  lastname: string = "";
+  firstname: string = "";
+
   ngOnInit() {
+    const user = this.authService.getUser();
+    if (user) {
+      this.lastname = 'LastName' in user ? user.LastName.trim() : "";
+      this.firstname = 'FirstName' in user ? user.FirstName.trim() : "";
+    }
   }
+
+  //HOW do i refreash after logout so a switch user cant see the other login name
 
   onLogoutClick(){
     this.authService.logout();

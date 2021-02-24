@@ -13,7 +13,9 @@
     import { MatDialog } from '@angular/material/dialog';
     import { Modal } from '../../modals/modal';
     import { AppointmentService } from '../../services/appointment.service';
+    import { AuthService } from '../../services/auth.service';
 
+    //make 1 file to hold all interfaces
     export interface calEventX extends CalendarEvent {
         id: string,
         professor: string,
@@ -21,11 +23,20 @@
         location: string,
     }
 
+    interface User {
+        email: string,
+        StudentID: string,
+        FacultyID: string,
+        FirstName: string,
+        Lastname: string
+    }
+
     @Component({
     selector: 'mwl-demo-component',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './calender.component.html',
     encapsulation: ViewEncapsulation.None,
+    //move to css file
     styles: [
         `
         .cal-week-view .cal-time-events .cal-day-column {
@@ -57,8 +68,8 @@
     })
     export class CalenderComponent {
 
-    constructor(public dialog: MatDialog, public aptSrv: AppointmentService) {}
-    
+    constructor(public dialog: MatDialog, public aptSrv: AppointmentService, public authSrv: AuthService) {}
+
     view: CalendarView = CalendarView.Week;
 
     viewDate: Date = new Date();
@@ -66,7 +77,6 @@
     hourBlock: Number = 2;
 
     events: calEventX[] = [];
-
 
     actions: CalendarEventAction[] = [
         // {
@@ -91,40 +101,55 @@
 
     hourColumns: WeekViewHourColumn[]; //holds days of the 7 week
 
+    facultyID: string = "";
+
     ngOnInit() {
+        //get faculty ID
+        const u = this.authSrv.getUser();
+        console.log(u);
+        if ('FacultyID' in u) {
+            this.facultyID = u.FacultyID;
+        } else {
+            console.log("No FAcultyID");
+            console.log(u);
+            return;
+        }
+
         console.log("This is the beginning!");
-        this.aptSrv.getAppointments({
-            FacultyID: 999999999
-        }).subscribe(data => {
-            //console.log(data);
-            this.data = data;
-            if ('appointments' in data) {
-                //if array
-                console.log(typeof this.data.appointments);
-                //if length > 1 
-                for (const apt of this.data.appointments) {
-                    let st = new Date(apt.StartTime);
-                    st.setHours(st.getHours() - st.getTimezoneOffset()/60);
-                    let endTime = new Date(st);
-                    endTime.setMinutes(endTime.getMinutes() + (apt.Duration * 60));
-                    console.log(apt.StartTime);
-                    console.log(st);
-                    console.log(endTime);
-                    this.events.push({
-                        start: new Date(st),
-                        end: endTime,
-                        title: " ID# "+apt.ID+', Room '+apt.Location,
-                        cssClass: 'cal-event-available',
-                        actions: this.actions,
-                        id: apt.ID,
-                        professor: apt.FacultyID,
-                        student: apt.StudentID,
-                        location: apt.Location
-                    });
+        if (this.facultyID) {
+            this.aptSrv.getAppointments({
+                FacultyID: this.facultyID
+            }).subscribe(data => {
+                //console.log(data);
+                this.data = data;
+                if ('appointments' in data) {
+                    //if array
+                    console.log(typeof this.data.appointments);
+                    //if length > 1 
+                    for (const apt of this.data.appointments) {
+                        let st = new Date(apt.StartTime);
+                        st.setHours(st.getHours() - st.getTimezoneOffset()/60);
+                        let endTime = new Date(st);
+                        endTime.setMinutes(endTime.getMinutes() + (apt.Duration * 60));
+                        console.log(apt.StartTime);
+                        console.log(st);
+                        console.log(endTime);
+                        this.events.push({
+                            start: new Date(st),
+                            end: endTime,
+                            title: " ID# "+apt.ID+', Room '+apt.Location,
+                            cssClass: 'cal-event-available',
+                            actions: this.actions,
+                            id: apt.ID,
+                            professor: apt.FacultyID,
+                            student: apt.StudentID,
+                            location: apt.Location
+                        });
+                    }
+                    console.log(this.events);
                 }
-                console.log(this.events);
-            }
-        });
+            });
+        }
     }
 
     eventClicked({ event }: { event: CalendarEvent }): void {
@@ -217,12 +242,14 @@
 
             }
 
+            //NEED: to prevent user from creating appointments on days tey already have scheduled? or cann they double book?
+
             const room = typeof result.room !== "undefined" && result.room ? result.room : "";
-            this.aptSrv.postAvailability(this.aptDatesSet, (this.hourBlock == 1 ? 1.0 : 0.5), room).subscribe(data => {
+            this.aptSrv.postAvailability(this.aptDatesSet, this.facultyID, (this.hourBlock == 1 ? 1.0 : 0.5), room).subscribe(data => {
                 console.log(data);
 
                 this.aptSrv.getAppointments({
-                    FacultyID: 999999999
+                    FacultyID: this.facultyID
                 }).subscribe(data => {
                     console.log(data);
                     this.data = data;
@@ -231,21 +258,23 @@
                         console.log(typeof this.data.appointments);
                         //if length > 1 
                         for (const apt of this.data.appointments) {
-                        let endTime = new Date(apt.StartTime);
-                        endTime.setMinutes(endTime.getMinutes() + (apt.Duration * 60));
-                        this.events.push({
-                                start: new Date(apt.StartTime),
-                                end: endTime,
-                                title: 'Room '+apt.Location,
-                                cssClass: 'cal-event-available',
-                                actions: this.actions,
-                                id: apt.ID,
-                                professor: apt.FacultyID,
-                                student: apt.StudentID,
-                                location: apt.Location
-                        });
+                            let st = new Date(apt.StartTime);
+                            st.setHours(st.getHours() - st.getTimezoneOffset()/60);
+                            let endTime = new Date(st);
+                            endTime.setMinutes(endTime.getMinutes() + (apt.Duration * 60));
+                            this.events.push({
+                                    start: st,
+                                    end: endTime,
+                                    title: 'Room '+apt.Location,
+                                    cssClass: 'cal-event-available',
+                                    actions: this.actions,
+                                    id: apt.ID,
+                                    professor: apt.FacultyID,
+                                    student: apt.StudentID,
+                                    location: apt.Location
+                            });
+                        }
                     }
-                }
 
                 //you can update the appointment events here
                 });
