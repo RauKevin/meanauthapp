@@ -1,5 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material';
+import { AppointmentService } from '../services/appointment.service';
 
 @Component({
   selector: 'dialog-content-example-dialog',
@@ -7,7 +8,8 @@ import {MAT_DIALOG_DATA} from '@angular/material';
 })
 export class Modal {
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: any,
+        public aptSrv: AppointmentService
      ) { }
 
     view: string;

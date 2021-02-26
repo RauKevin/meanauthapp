@@ -144,13 +144,13 @@ router.post('/createAppointments', (req, res, next) => {
             }
         }
     }
-    if (error.length || Appointments.length == 0) {
+    if (error.length || (Appointments.length == 0 && updateAppointments.length == 0)) {
         return res.json({success: false, msg: 'Bad input data.', error: error});
     }
 
     /* What to do with update Appointments */ //might have to nest the callback
     //call appointment_model.updateAppointments;
-    appointment_model.updateAppointments(updateAppointments, (apts, err) => {
+    appointment_model.updateAppointments(updateAppointments, "Removed", (apts, err) => {
         //too much work, how about just a true or false if db transaction successful
         // let a = apts;
         // let error = err;
@@ -167,7 +167,7 @@ router.post('/createAppointments', (req, res, next) => {
 
 router.post('/setAppointment', (req, res, next) => {
     if (typeof req.body.StudentID === "undefined" || typeof req.body.AppointmentID === "undefined") {
-        return res.json({success: false, msg: 'Bad input data.', error: error});
+        return res.json({success: false, msg: 'Bad input data.', error: "error"});
     }
     let filter = {
         id: req.body.AppointmentID,
@@ -177,6 +177,7 @@ router.post('/setAppointment', (req, res, next) => {
         if (apts) {
             console.log("is appointment avaialble?'");
             console.log(apts);
+            //cant I just feed in the id here instead of another select?
             appointment_model.setAppointment(req.body.AppointmentID, req.body.StudentID, (apt, err) => {
                 if (apt) {
                     res.json({success: true, appointment: apt, msg: 'Successfully made appointment'});
@@ -224,16 +225,11 @@ router.post('/getAppointments', (req, res, next) => {
 });
 
 router.post('/cancelAppointment', (req, res, next) => {
-    if (typeof req.body.StudentID === "undefined" || typeof req.body.AppointmentID === "undefined") {
-        return res.json({success: false, msg: 'Bad input data.', error: error});
-    }
-    const removeApt = {
-        ID: req.body.AppointmentID,
-        StudentID: null,
-        Status: 'Available'
-    };
+    if (typeof req.body.AppointmentID === "undefined") {
+        return res.json({success: false, msg: "Bad input data.", error: "error"});
+    }   
 
-    appointment_model.updateAppointments(removeApt, (status, err) => {
+    appointment_model.cancelAppointment(req.body.AppointmentID, (status, err) => {
         if (status) {
             return res.json({success: true, message: "Successfully canceled appointment."});
         } else {

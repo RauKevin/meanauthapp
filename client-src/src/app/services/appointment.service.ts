@@ -26,19 +26,50 @@ export class AppointmentService {
         //
     }
 
+    cancelAppointment(aptID) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        const data = {
+            AppointmentID: aptID
+        };
+        //do I need params instead?
+        return this.http.post('http://localhost:3000/api/cancelAppointment', data, httpOptions);
+    }
+
+    //auth service might be useful to getfacultyId and studentId?
+    scheduleAppointment(aptID, studentID) {
+        //you use this alot I could be a gloabal
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        const data = {
+            AppointmentID: aptID,
+            StudentID: studentID
+        };
+        //do I need params instead?
+        return this.http.post('http://localhost:3000/api/setAppointment', data, httpOptions);
+    }
+
     getAppointments(params) {
         //getAppointments
         let data:any = {};
         if (typeof params.FacultyID !== "undefined" && params.FacultyID) {
             data.FacultyID = params.FacultyID;
         }
-        if (typeof params.StudentID !== "undefined" && params.StudentID !== null) {
+        if (typeof params.StudentID !== "undefined") {
             data.StudentID = params.StudentID;
         }
         if (typeof params.Open !== "undefined" && params.Open) {
             data.Open = params.Open;
         }
         //And id, date range and date
+        console.log("getAppointments")
+        console.log(data);
         
         const httpOptions = {
             headers: new HttpHeaders({
@@ -49,7 +80,7 @@ export class AppointmentService {
         return this.http.post('http://localhost:3000/api/getAppointments', data, httpOptions);
     }
 
-    postAvailability(dateTimes:Set<any>, facultyID:string, duration:Number, room:string): any {
+    postAvailability(dateTimes:Set<any>, removedDT: any[], facultyID:string, duration:Number, room:string): any {
         //I can get FacultyID from cookie?
         const token = localStorage.getItem('id_token');
         console.log(token);
@@ -74,6 +105,19 @@ export class AppointmentService {
                     Duration: duration,
                     Token: token
                 });
+            }
+            if (removedDT.length > 0) {
+                for (const r of removedDT) {
+                    if ('id' in r) {
+                        apts.push({
+                            ID: r.id,
+                            Location: r.location,
+                            StartTime: r.start,
+                            FacultyID: r.professor,
+                            Duration: r.duration
+                        });
+                    }
+                }
             }
         }
         if (apts.length > 0) {

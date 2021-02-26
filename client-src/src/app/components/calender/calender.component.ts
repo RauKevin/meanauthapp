@@ -21,6 +21,7 @@
         professor: string,
         student: string,
         location: string,
+        duration: number
     }
 
     interface User {
@@ -31,8 +32,23 @@
         Lastname: string
     }
 
+    const colors: any = {
+        red: {
+          primary: '#ad2121',
+          secondary: '#FAE3E3'
+        },
+        blue: {
+          primary: '#1e90ff',
+          secondary: '#D1E8FF'
+        },
+        yellow: {
+          primary: '#e3bc08',
+          secondary: '#FDF1BA'
+        }
+      };
+
     @Component({
-    selector: 'mwl-demo-component',
+    selector: 'add-availability',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './calender.component.html',
     encapsulation: ViewEncapsulation.None,
@@ -91,7 +107,7 @@
                 console.log("Action 2");
                 console.log(event);
                 event.cssClass = 'cal-event-removed';
-                this.canceledDates.add(event.id);
+                this.canceledDates.push(event);
                 this.events = this.events.filter(e => e !== event);
             }
         }
@@ -139,11 +155,16 @@
                             end: endTime,
                             title: " ID# "+apt.ID+', Room '+apt.Location,
                             cssClass: 'cal-event-available',
+                            color: {
+                                "primary": "#ad2121",
+                                "secondary": "#FAE3E3"
+                              },
                             actions: this.actions,
                             id: apt.ID,
                             professor: apt.FacultyID,
                             student: apt.StudentID,
-                            location: apt.Location
+                            location: apt.Location,
+                            duration: apt.Duration
                         });
                     }
                     console.log(this.events);
@@ -204,7 +225,7 @@
 
     aptDates: Date[] = new Array(); //if this doesn't work I'll make a new class and import
     aptDatesSet = new Set();
-    canceledDates = new Set(); //or Array, it would get existing dates from server prior to select.
+    canceledDates: any[] = [];
 
     clickedColumn: number;
 
@@ -238,15 +259,18 @@
 
             //do a better job nesting callbacks
             //cancel appointments if they already exist
-            if (this.canceledDates.size > 0) {
+            if (this.canceledDates.length > 0) {
 
             }
 
             //NEED: to prevent user from creating appointments on days tey already have scheduled? or cann they double book?
 
             const room = typeof result.room !== "undefined" && result.room ? result.room : "";
-            this.aptSrv.postAvailability(this.aptDatesSet, this.facultyID, (this.hourBlock == 1 ? 1.0 : 0.5), room).subscribe(data => {
+            this.aptSrv.postAvailability(this.aptDatesSet, this.canceledDates, this.facultyID, (this.hourBlock == 1 ? 1.0 : 0.5), room).subscribe(data => {
                 console.log(data);
+
+                this.events = [];
+                this.canceledDates = [];
 
                 this.aptSrv.getAppointments({
                     FacultyID: this.facultyID
@@ -263,20 +287,23 @@
                             let endTime = new Date(st);
                             endTime.setMinutes(endTime.getMinutes() + (apt.Duration * 60));
                             this.events.push({
-                                    start: st,
-                                    end: endTime,
-                                    title: 'Room '+apt.Location,
-                                    cssClass: 'cal-event-available',
-                                    actions: this.actions,
-                                    id: apt.ID,
-                                    professor: apt.FacultyID,
-                                    student: apt.StudentID,
-                                    location: apt.Location
+                                start: st,
+                                end: endTime,
+                                title: 'Room '+apt.Location,
+                                cssClass: 'cal-event-available',
+                                actions: this.actions,
+                                id: apt.ID,
+                                professor: apt.FacultyID,
+                                student: apt.StudentID,
+                                location: apt.Location,
+                                duration: apt.Duration
                             });
                         }
                     }
 
                 //you can update the appointment events here
+
+                //refresh table here, you know how.
                 });
             });
         });

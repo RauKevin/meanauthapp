@@ -102,4 +102,21 @@ export class AuthService {
     //need a way to tell if faculty or student
   }
 
+  getType() : string {
+    const currentUser = this.getUser();
+    let userType: string = null;
+    if (currentUser) {
+      console.log(currentUser.FacultyID); //FacultyID
+      console.log(typeof currentUser.FacultyID);
+      console.log(currentUser.StudentID); //StudentID
+      console.log(typeof currentUser.StudentID);
+      if (currentUser.FacultyID) {
+        userType = 'faculty';
+      } else if (currentUser.StudentID) {
+        userType = 'student';
+      }
+    }
+    return userType;
+  }
+
 }

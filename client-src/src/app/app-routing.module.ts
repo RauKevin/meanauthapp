@@ -11,6 +11,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { MakeAppointmentComponent } from './components/make-appointment/make-appointment.component';
 import { ScheduleAppointmentComponent } from './components/schedule-appointment/schedule-appointment.component';
 import { ViewAppointmentComponent } from './components/view-appointment/view-appointment.component';
+import { CalenderComponent } from './components/calender/calender.component';
 
 /* Service imports */
 import { AuthGuard } from './guards/auth.guard';
@@ -22,7 +23,7 @@ const routes: Routes = [
   {path:'', component: DashboardComponent, canActivate:[AuthGuard]},
   {path:'dashboard', component: DashboardComponent, canActivate:[AuthGuard]},
   {path:'profile', component: ProfileComponent, canActivate:[AuthGuard]},
-  {path:'generate', component: MakeAppointmentComponent},
+  {path:'generate', component: CalenderComponent},
   {path:'schedule', component: ScheduleAppointmentComponent},
   {path:'view', component: ViewAppointmentComponent},
 ];

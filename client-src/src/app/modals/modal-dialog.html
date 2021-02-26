@@ -27,8 +27,7 @@
   <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Cancel</button>
     <!-- it would appear I can send all items assiciated with data this way! Hell Yea -->
-    <button mat-button [mat-dialog-close]="data">Room</button>
-    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Confirm</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirm</button>
   </mat-dialog-actions>
 </div>
 
@@ -42,4 +41,32 @@
   <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Close</button>
   </mat-dialog-actions>
+</div>
+
+<!-- View Appointment -->
+<div *ngIf="data.view == 'schedule'">
+  <h3>{{data.title}}</h3>
+  <p>Start time: {{data.start}}</p>
+  <p>End time: {{data.end}}</p>
+  <p>Location: {{data.location}}</p>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Close</button><!--returns empty string -->
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Schedule</button><!--returns empty string or null-->
+  </mat-dialog-actions>
+  <!--cicking outside of modal closes it and returns undefined-->
+</div>
+
+<!-- View Appointment -->
+<div *ngIf="data.view == 'cancel'">
+  <h3>{{data.title}}</h3>
+  <p>Start time: {{data.start}}</p>
+  <p>End time: {{data.end}}</p>
+  <p>Location: {{data.location}}</p>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Close</button><!--returns empty string -->
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Cancel Appointment</button><!--returns empty string or null-->
+  </mat-dialog-actions>
+  <!--cicking outside of modal closes it and returns undefined-->
 </div>

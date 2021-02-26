@@ -28,6 +28,10 @@
   </div>
   <!-- Change header for this view -->
   <div class="col-md-8" style="padding: 2em; border: 1px solid black">
-    <app-schedule></app-schedule>
+    <app-schedule
+      [events]="events"
+      [eventClicked]="eventClicked"
+      [notifier]="childNotifier"
+    ></app-schedule>
   </div>
 </div>
