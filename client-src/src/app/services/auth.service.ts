@@ -9,6 +9,7 @@ export class AuthService {
  
   authToken:any;
   user:any;
+  userType:any = null;
 
   constructor(private http:HttpClient) { }
 
@@ -102,21 +103,32 @@ export class AuthService {
     //need a way to tell if faculty or student
   }
 
+  //WHY is this called a million times
   getType() : string {
+    if (this.userType) {
+      return this.userType;
+    }
     const currentUser = this.getUser();
-    let userType: string = null;
     if (currentUser) {
       console.log(currentUser.FacultyID); //FacultyID
       console.log(typeof currentUser.FacultyID);
       console.log(currentUser.StudentID); //StudentID
       console.log(typeof currentUser.StudentID);
       if (currentUser.FacultyID) {
-        userType = 'faculty';
+        this.userType = 'faculty';
       } else if (currentUser.StudentID) {
-        userType = 'student';
+        this.userType = 'student';
       }
     }
-    return userType;
+    return this.userType;
+  }
+
+  isFaculty() {
+    return this.getType() === 'faculty';
+  }
+
+  isStudent() {
+    return this.getType() === 'student';
   }
 
 }
