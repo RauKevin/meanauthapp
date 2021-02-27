@@ -1,0 +1,8 @@
+#userName {
+    font-size: x-large;
+}
+
+#userName i {
+    font-size: large;
+    padding-right: 10px;
+}

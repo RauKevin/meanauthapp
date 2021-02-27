@@ -15,6 +15,8 @@ import { CalenderComponent } from './components/calender/calender.component';
 
 /* Service imports */
 import { AuthGuard } from './guards/auth.guard';
+import { FacultyGuard } from './guards/faculty.guard';
+import { HelpComponent } from './components/help/help.component';
 
 const routes: Routes = [
   {path:'welcome', component: HomeComponent},
@@ -23,9 +25,10 @@ const routes: Routes = [
   {path:'', component: DashboardComponent, canActivate:[AuthGuard]},
   {path:'dashboard', component: DashboardComponent, canActivate:[AuthGuard]},
   {path:'profile', component: ProfileComponent, canActivate:[AuthGuard]},
-  {path:'generate', component: CalenderComponent},
-  {path:'schedule', component: ScheduleAppointmentComponent},
-  {path:'view', component: ViewAppointmentComponent},
+  {path:'generate', component: CalenderComponent, canActivate:[AuthGuard]}, // canAcitvate:[FacultyGuard] just route to a 403 if student this doesnt work
+  {path:'schedule', component: ScheduleAppointmentComponent, canActivate:[AuthGuard]},
+  {path:'view', component: ViewAppointmentComponent, canActivate:[AuthGuard]},
+  {path:'help', component: HelpComponent, canActivate:[AuthGuard]},
 ];
 
 @NgModule({

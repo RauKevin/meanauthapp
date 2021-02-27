@@ -26,6 +26,7 @@ import { AuthService } from './services/auth.service';
 import { AppointmentService } from './services/appointment.service';
 import { NgFlashMessagesModule } from 'ng-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
+import { FacultyGuard } from './guards/faculty.guard';
 import { CalenderComponent } from './components/calender/calender.component';
 import { CalenderHeaderComponent } from './components/calender-header/calender-header.component';
 import { ModalTestComponent } from './components/modal-test/modal-test.component';
@@ -39,6 +40,8 @@ import { MakeAppointmentComponent } from './components/make-appointment/make-app
 import { ViewAppointmentComponent } from './components/view-appointment/view-appointment.component';
 import { ScheduleAppointmentComponent } from './components/schedule-appointment/schedule-appointment.component';
 import { ScheduleComponent } from './components/schedule/schedule.component';
+import { HelpComponent } from './components/help/help.component';
+import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +60,9 @@ import { ScheduleComponent } from './components/schedule/schedule.component';
     MakeAppointmentComponent,
     ViewAppointmentComponent,
     ScheduleAppointmentComponent,
-    ScheduleComponent
+    ScheduleComponent,
+    HelpComponent,
+    ForbiddenComponent
   ],
   imports: [
     BrowserModule,
@@ -73,7 +78,7 @@ import { ScheduleComponent } from './components/schedule/schedule.component';
     }),
     MatDialogModule
   ],
-  providers: [ValidateService, AuthService, AuthGuard, AppointmentService],
+  providers: [ValidateService, AuthService, AuthGuard, FacultyGuard, AppointmentService],
   bootstrap: [AppComponent],
   entryComponents: [ Modal ]
 })

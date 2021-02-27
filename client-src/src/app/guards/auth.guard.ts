@@ -3,7 +3,7 @@ import { Router, CanActivate } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate{
+export class AuthGuard implements CanActivate {
     constructor(
         private authService: AuthService,
         private router: Router
@@ -17,4 +17,18 @@ export class AuthGuard implements CanActivate{
             return false;
         }
     }
+
+    // studentOnly() {
+    //     const type = this.authService.getType();
+    //     return type === 'student';
+    // }
+
+    // facultyOnly() {
+    //     const type = this.authService.getType();
+    //     if (type === 'faculty') {
+    //         this.router.navigate(['/generate']);
+    //         return true;
+    //     }
+    //     return false;
+    // }
 }

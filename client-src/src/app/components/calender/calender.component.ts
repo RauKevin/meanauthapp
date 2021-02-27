@@ -14,6 +14,7 @@
     import { Modal } from '../../modals/modal';
     import { AppointmentService } from '../../services/appointment.service';
     import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
     //make 1 file to hold all interfaces
     export interface calEventX extends CalendarEvent {
@@ -84,7 +85,12 @@
     })
     export class CalenderComponent {
 
-    constructor(public dialog: MatDialog, public aptSrv: AppointmentService, public authSrv: AuthService) {}
+    constructor(
+        public dialog: MatDialog, 
+        public aptSrv: AppointmentService, 
+        public authSrv: AuthService,
+        private router:Router
+        ) {}
 
     view: CalendarView = CalendarView.Week;
 
@@ -123,11 +129,12 @@
         //get faculty ID
         const u = this.authSrv.getUser();
         console.log(u);
-        if ('FacultyID' in u) {
+        if ('FacultyID' in u && u.FacultyID) {
             this.facultyID = u.FacultyID;
         } else {
-            console.log("No FAcultyID");
+            console.log("No FacultyID");
             console.log(u);
+            this.router.navigate(['/']);
             return;
         }
 
