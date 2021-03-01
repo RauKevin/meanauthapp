@@ -5,3 +5,8 @@
 #viewAptContainer {
     margin-top: 1em;
 }
+
+#noAppointmentText {
+    display: unset;
+    text-align: center;
+}

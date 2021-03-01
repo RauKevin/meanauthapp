@@ -3,28 +3,59 @@
 </div>
 <div class="row">
   <div class="col-md-4" style="padding: 1.5em;">
-    <div>
-      <button [routerLink]="['/schedule']" class="btn" id="scheduleBtn" style="background-color: rgb(78, 17, 136); color:white;">Schedule Appointment</button>
-    </div>
-    <div>
-      <div *ngIf="events.length > 0">
-          <div class="row" *ngFor="let event of events" style="margin-top: 10px;">
-            <div class="text-left">
-              <hr>
-              {{event.title}}, {{event.start}} - {{event.end}}, {{event.location}} 
+    <!-- Student View -->
+    <div *ngIf="userType === 'student'">
+      <div>
+        <button [routerLink]="['/schedule']" class="btn" id="scheduleBtn" style="background-color: rgb(78, 17, 136); color:white;">Schedule Appointment</button>
+      </div>
+      <hr>
+      <div style="margin-top:2em;">
+        <div *ngIf="events.length > 0">
+            <div class="row" *ngFor="let event of aptDetails" style="margin-top: 10px;">
+              <div class="col-md-9">
+                <div><b>Faculty: {{event.faculty}}</b></div>
+                <div>Time: {{event.start}} - {{event.end}}</div>
+                <div>Duration: {{event.duration}} mins</div>
+                <div>Location: Room {{event.location}}</div>
+                <hr>
+              </div>
+              <div class="col-md-3 text-center">
+                <button class="btn" (click)="cancelAppointment(event.id)" style="background-color: rgb(214, 71, 52); padding: 4px;">Cancel</button>
+              </div>
             </div>
-            <div class="text-right" style="width:90%;">
+        </div>
+        <div *ngIf="events.length == 0" class="row" id="noAppointmentText">
+          <p>You have no scheduled apointments at this time.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Faculty View -->
+    <div *ngIf="userType === 'faculty'">
+      <div>
+        <div>
+          You have <b>{{events.length}}</b> scheduled Appointments.
+        </div>
+        <br>
+        <div *ngIf="events.length > 0">
+          <div class="row" *ngFor="let event of aptDetails" style="margin-top: 10px;">
+            <div class="col-md-9">
+              <div><b>Student: {{event.student}}</b></div><!--Show name and id number-->
+              <div>Time: {{event.start}} - {{event.end}}</div>
+              <div>Duration: {{event.duration}} mins</div>
+              <div>Location: Room {{event.location}}</div>
+              <hr>
+            </div>
+            <div class="col-md-3 text-center">
               <button class="btn" (click)="cancelAppointment(event.id)" style="background-color: rgb(214, 71, 52); padding: 4px;">Cancel</button>
             </div>
           </div>
-
-      </div>
-      <div *ngIf="events.length == 0" class="row">
-        <p>You have no scheduled apointments at this time.</p>
+        </div>
+        <div *ngIf="events.length == 0" id="noAppointmentText">
+          <p>You have no student scheduled apointments at this time.</p>
+        </div>
       </div>
     </div>
 
-    <hr>
   </div>
   <!-- Change header for this view -->
   <div class="col-md-8" style="padding: 2em; border: 1px solid black">

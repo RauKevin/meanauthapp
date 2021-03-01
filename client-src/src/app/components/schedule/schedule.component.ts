@@ -11,6 +11,7 @@ import { WeekViewHour, WeekViewHourColumn } from 'calendar-utils';
 import { Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { Modal } from '../../modals/modal';
+import { AppointmentService } from 'src/app/services/appointment.service';
 
 export interface calEventX extends CalendarEvent {
   id: string,
@@ -27,7 +28,7 @@ export interface calEventX extends CalendarEvent {
 })
 export class ScheduleComponent {
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, public aptSrv: AppointmentService,) { }
 
   @Input() notifier: Subject<any>;
 

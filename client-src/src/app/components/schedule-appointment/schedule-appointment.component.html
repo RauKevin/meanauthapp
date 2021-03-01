@@ -1,11 +1,11 @@
-<div class="" id="viewAptContainer">
+<div class="" id="scheduleAptContainer">
   <h2>Schedule an Appointment</h2>
 </div>
 <div class="row">
-  <div class="col-md-4" style="padding: 1.5em;">
+  <div class="col-md-4 form-group" style="padding: 1.5em;">
 
     <label for="professors">Faculty: </label>
-    <select id="professors" [(ngModel)]="selectedFaculty" (change)="facultyChange()">
+    <select class="form-control" id="professors" [(ngModel)]="selectedFaculty" (change)="facultyChange()">
       <option value=""></option>
       <option *ngFor="let fac of faculty" 
           [value]="fac.FacultyID" 
@@ -17,7 +17,7 @@
     <div *ngIf="!noApts && selectedFaculty.length > 0, else elseBlock">
       <br> <!--Change this to a row-->
       <label for="aptDate">Date: </label>
-      <select id="aptDate" [(ngModel)]="selectedDay" (change)="dateChange()">
+      <select class="form-control" id="aptDate" [(ngModel)]="selectedDay" (change)="dateChange()">
         <option value=""></option>
         <option *ngFor="let date of availableDatesSet" 
             [value]="date"
@@ -28,7 +28,7 @@
   
       <br> <!--Change this to a row-->
       <label for="aptTime">Time: </label>
-      <select id="aptTime" [(ngModel)]="selectedTime" (change)="timeChange()">
+      <select class="form-control" id="aptTime" [(ngModel)]="selectedTime" (change)="timeChange()">
         <option value=""></option>
         <option *ngFor="let time of availableTimes" 
             [value]="time"
@@ -36,20 +36,29 @@
           {{time}}
         </option>
       </select>
-      <!-- <button *ngIf="selectedTime">Schedule</button> -->
 
       <hr>
 
-      <!-- Could also loop through dates and diplay below -->
-      <div *ngFor="let dets of aptDetails">
-        <p>{{dets.faculty}} - {{dets.location}} - {{dets.date}} - {{dets.startTime}} - {{dets.duration}} <button (click)="scheduleApt(dets.id)">Add</button></p>
-        <hr>
+      <div *ngFor="let dets of aptDetails" class="row aptRow">
+        <div class="col-md-9">
+          <div><b>{{dets.faculty}}</b></div>
+          <div>{{dets.start}} - {{dets.end}}</div>
+          <div>{{dets.duration}} mins</div>
+          <div>Room {{dets.location}}</div>
+          <hr>
+        </div>        
+        <div class="col-md-3">
+          <button class="btn btn-info btn-sm" (click)="scheduleApt(dets.id)">Schedule</button>
+        </div>
       </div>
 
     </div>
-    <ng-template #elseBlock><p>No Appointments Available.</p></ng-template>
+    <ng-template #elseBlock>
+      <div id="noAppointmentText">
+        <p>No Appointments Available.</p>
+      </div>
+    </ng-template>
     
-    <hr>
   </div>
   <!-- Change header for this view -->
   <div class="col-md-8" style="padding: 2em; border: 1px solid black">

@@ -80,49 +80,24 @@ ngOnInit() {
     console.log(this.selectedFaculty);
 }
 
-// eventClicked({ event }: { event: CalendarEvent }): void {
-//     console.log("Event clicked");
-//     const dialogRef = this.dialog.open(Modal, {
-//       data: {
-//           start: event.start.toDateString(),
-//           end: event.end.toDateString(),
-//           title: event.title,
-//           view: 'view'
-//       }
-//     });
-// }
-
 //this is called from schedule component so it needs the aptSrv?
 eventClicked(args: any): void {
-    console.log("Event clicked schedule apt.");
-    console.log(args);
+    console.log("Event clicked schedule apt.");    
     if ('event' in args) {
-        const event = args.event;
+        this.data = args.event;
+        let st = this.aptSrv.fmtDate(this.data.start);
+        let et = this.aptSrv.fmtDate(this.data.end);
         const dialogRef = this.dialog.open(Modal, {
             data: {
-                id: event.id,
-                start: event.start.toDateString(),
-                end: event.end.toDateString(),
-                location: event.location,
-                title: event.title,
-                view: 'schedule'
-            }
-        });
-        dialogRef.afterClosed().subscribe(result => {
-            if (result && event.id) {
-                console.log(result);
-                // this.aptSrv.scheduleAppointment(event.id).subscribe(data => {
-                //     console.log("Schedule Appointment response");
-                //     console.log(data);
-                // });
-                this.hello();
+                start: st,
+                end: et,
+                title: "Appointment",
+                status: (this.data.student ? "Scheduled" : "Available"),
+                location: this.data.location ? this.data.location : "(unspecified)",
+                view: 'view'
             }
         });
     }
-}
-
-hello() {
-    console.log("Hello");
 }
 
 getAppointments(facultyID) {
@@ -135,7 +110,7 @@ getAppointments(facultyID) {
         this.data = data;
         if ('appointments' in data) {
             //if array
-            console.log(typeof this.data.appointments);
+            console.log(this.data.appointments);
             //if length > 1 
 
             // you can also filter out apts that are after hours
@@ -149,6 +124,9 @@ getAppointments(facultyID) {
                 console.log(apt.StartTime.toString());
 
                 //if Status = 'Available'
+                if (st.getTime() <= Date.now()) {
+                    continue;
+                }
 
                 this.events.push({
                     start: st,
@@ -159,15 +137,16 @@ getAppointments(facultyID) {
                     id: apt.ID,
                     professor: apt.FacultyID,
                     student: apt.StudentID,
-                    location: apt.Location,
+                    location: apt.Location.trim(),
                     duration: (apt.Duration * 60)
                 });
 
-                const dateFormated = st.getMonth()+1 + "-" + st.getDate() + '-' + st.getFullYear();
+                const dateFormated = this.aptSrv.fmtDate(st, "date");
+                
                 this.availableDates.push({
                     eventID: apt.ID,
                     d: dateFormated,
-                    t: st.getHours() + ":" + st.getMinutes(),
+                    t: this.aptSrv.fmtDate(st, "time"),
                     value: st
                 });
                 this.availableDatesSet.add(dateFormated);
@@ -244,9 +223,9 @@ loadAvailableApts() {
             }
             if (eventX) {
                 const objX = {
-                    location: eventX.location,
-                    start: eventX.start,
-                    end: eventX.end,
+                    location: eventX.location ? eventX.location : "(unspecified)",
+                    start: this.aptSrv.fmtDate(eventX.start),
+                    end: this.aptSrv.fmtDate(eventX.end),
                     faculty: instructor,
                     duration: eventX.duration,
                     id: eventX.id,
@@ -272,11 +251,15 @@ scheduleApt(aptId) {
         }
     }
     if (event) {
+        let st = this.aptSrv.fmtDate(event.start);
+        let et = this.aptSrv.fmtDate(event.end);
         const dialogRef = this.dialog.open(Modal, {
             data: {
-                start: event.start.toDateString(),
-                end: event.end.toDateString(),
-                title: event.title,
+                start: st,
+                end: et,
+                title: "Appointment",
+                status: (event.student ? "Scheduled" : "Available"),
+                location: event.location ? event.location : "(unspecified)",
                 view: 'schedule'
             }
         });

@@ -30,6 +30,7 @@ export class ViewAppointmentComponent implements OnInit {
   userType: string;
   studentID: string = null;
   facultyID: string = null;
+  aptDetails: any[] = [];
 
   ngOnInit() {
     console.log("This is the beginning!");
@@ -58,22 +59,32 @@ export class ViewAppointmentComponent implements OnInit {
             console.log(typeof this.data.appointments);
             //if length > 1 
             for (const apt of this.data.appointments) {
+                if (!apt.StudentID) {
+                  continue;
+                }
                 let st = new Date(apt.StartTime);
                 st.setHours(st.getHours() - st.getTimezoneOffset()/60);
                 let endTime = new Date(st);
                 endTime.setMinutes(endTime.getMinutes() + (apt.Duration * 60));
-                console.log(apt.StartTime);
-                console.log(apt.StartTime.toString());
+                const loc = apt.Location.trim() ? apt.Location.trim() : "(unspecified)"
                 this.events.push({
                     start: st,
                     end: endTime,
                     title: 'Room '+apt.Location,
-                    cssClass: 'cal-event-scheduled',
                     actions: this.actions,
                     id: apt.ID,
                     professor: apt.FacultyID,
                     student: apt.StudentID,
-                    location: apt.Location,
+                    location: loc,
+                    duration: (apt.Duration * 60)
+                });
+                this.aptDetails.push({
+                    start: this.aptSrv.fmtDate(st),
+                    end: this.aptSrv.fmtDate(endTime),
+                    id: apt.ID,
+                    professor: apt.FacultyID,
+                    student: apt.StudentID,
+                    location: loc,
                     duration: (apt.Duration * 60)
                 });
             }
@@ -87,13 +98,18 @@ eventClicked(args: any): void {
   console.log("Event clicked schedule apt.");
   console.log(args);
   if ('event' in args) {
-      const event = args.event;
+      this.data = args.event;
+      let st = this.aptSrv.fmtDate(this.data.start);
+      let et = this.aptSrv.fmtDate(this.data.end);
       const dialogRef = this.dialog.open(Modal, {
           data: {
-              start: event.start.toDateString(),
-              end: event.end.toDateString(),
-              title: event.title,
-              view: 'view' //change to allow a cancel option
+              start: st,
+              end: et,
+              title: "Appointment",
+              faculty: "yo mama",
+              status: (this.data.student ? "Scheduled" : "Available"),
+              location: this.data.location ? this.data.location : "(unspecified)",
+              view: 'view'
           }
       });
   }
@@ -114,26 +130,32 @@ cancelAppointment(id) {
   if (!event) {
     return;
   }
-  //move this to the modal!!!
+
+  let st = this.aptSrv.fmtDate(event.start);
+  let et = this.aptSrv.fmtDate(event.end);
   const dialogRef = this.dialog.open(Modal, {
       data: {
-          start: event.start.toDateString(),
-          end: event.end.toDateString(),
-          title: event.title,
+          start: st,
+          end: et,
+          title: "Appointment",
+          faculty: "yo mama",
+          location: this.data.location ? this.data.location : "(unspecified)",
           view: 'cancel'
       }
   });
   dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.aptSrv.cancelAppointment(id).subscribe(data => {
-          console.log("Successfully cancelled apt?");
           console.log(data);
 
           //remove from event array
           this.events = this.events.filter((evt) => {
             return id !== evt.id;
           });
-      
+          this.aptDetails = this.aptDetails.filter(evt => {
+            return id !== evt.id;
+          });
+
           //refresh table
           this.childNotifier.next(null);
 

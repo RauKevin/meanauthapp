@@ -22,6 +22,36 @@ export class AppointmentService {
         return s;
     }
 
+    fmtDate(date:Date, type:string="") : string {
+        let y = date.getFullYear();
+        let mo = date.getMonth() + 1;
+        let d = date.getDate();
+        let h = date.getHours();
+        let mi = date.getMinutes();
+        let mins = "";
+        let ampm = "";
+        if (h > 12) {
+            h -= 12;
+            ampm = "PM";
+        } else {
+            ampm = "AM";
+        }
+        console.log(mi);
+        if (mi < 10) {
+            mins = "0" + mi;
+        } else {
+            mins = "" + mi;
+        }
+
+        if (type === "date") {
+            return`${mo}/${d}/${y}`;
+        } else if (type === "time") {
+            return `${h}:${mins} ${ampm}`;
+        }
+
+        return `${mo}/${d}/${y} ${h}:${mins} ${ampm}`;
+    }
+
     deleteAppointments(aptIDs) {
         //
     }
