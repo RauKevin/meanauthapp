@@ -11,7 +11,7 @@
     </div>
   </div>
 </div>
-<div *ngIf="!authService.loggedIn()">
+<div *ngIf="!authService.loggedIn()" id="entry">
   <div class="container">
       <ng-flash-message></ng-flash-message>
       <router-outlet></router-outlet>

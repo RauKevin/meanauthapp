@@ -6,3 +6,10 @@
 
     min-height:90vh;
 }
+
+#entry {
+    background-image: url("https://pbs.twimg.com/media/EU3DTpiUYAEGu1-.jpg");
+    min-height: 100vh; /*chnage to match background image height*/
+    background-repeat: repeat-x;
+    /* background-color: #424242; */
+}

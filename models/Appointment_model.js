@@ -72,23 +72,37 @@ module.exports.getAppointments = function (filter, cb) {
     }
 
     if ('facultyID' in filter && filter.facultyID) {
-        extraWhere += ` AND "FacultyID" = '${filter.facultyID}'\n`;
+        extraWhere += ` AND "Appointment"."FacultyID" = '${filter.facultyID}'\n`;
     }
 
     if ('studentID' in filter && filter.studentID) {
-        extraWhere += ` AND "StudentID" = '${filter.studentID}'\n`;
+        extraWhere += ` AND "Appointment"."StudentID" = '${filter.studentID}'\n`;
     }
 
     if ('open' in filter && filter.open) {
-        extraWhere += ` AND "StudentID" IS NULL AND "Status" != 'Removed'\n`;
+        extraWhere += ` AND "Appointment"."StudentID" IS NULL AND "Status" != 'Removed'\n`;
     }
 
     if ('id' in filter && filter.id) {
-        extraWhere += ` AND "ID" = '${filter.id}'\n`;
+        extraWhere += ` AND "Appointment"."ID" = '${filter.id}'\n`;
     }
 
+    const extraJoin = ` 
+        LEFT JOIN "User" u_0 ON (u_0."StudentID" = "Appointment"."StudentID") \n
+        LEFT JOIN "User" u_1 ON (u_1."FacultyID" = "Appointment"."FacultyID") \n
+    `;
+
+    const extraSelect = `, 
+        u_0."FirstName" as "StudentFirstName", 
+        u_0."LastName" as "StudentLastName", 
+        u_0."Email" as "StudentEmail", 
+        u_1."FirstName" as "FacultyFirstName", 
+        u_1."LastName" as "FacultyLastName", 
+        u_1."Email" as "FacultyEmail"
+    `;
+
     let query = `
-        SELECT * FROM "Appointment" WHERE TRUE AND ${extraWhere} ORDER BY "StartTime" ASC;
+        SELECT "Appointment".* ${extraSelect} FROM "Appointment" ${extraJoin} WHERE TRUE AND ${extraWhere} ORDER BY "StartTime" ASC;
     `;
     console.log(query);
     client.query(query, (err, res) => {

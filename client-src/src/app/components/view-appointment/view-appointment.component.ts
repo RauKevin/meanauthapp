@@ -9,9 +9,13 @@ import { AuthService } from 'src/app/services/auth.service';
 export interface calEventX extends CalendarEvent {
   id: string,
   professor: string,
+  professorID: string,
   student: string,
+  studentID: string,
   location: string,
-  duration: number
+  duration: number,
+  studentEmail: string,
+  facultyEmail: string,
 }
 
 @Component({
@@ -73,19 +77,27 @@ export class ViewAppointmentComponent implements OnInit {
                     title: 'Room '+apt.Location,
                     actions: this.actions,
                     id: apt.ID,
-                    professor: apt.FacultyID,
-                    student: apt.StudentID,
+                    professor: apt.FacultyLastName + ", " + apt.FacultyFirstName,
+                    professorID: apt.FacultyID,
+                    student: apt.StudentLastName + ", " + apt.StudentFirstName,
+                    studentID: apt.StudentID,
                     location: loc,
-                    duration: (apt.Duration * 60)
+                    duration: (apt.Duration * 60),
+                    studentEmail: apt.StudentEmail,
+                    facultyEmail: apt.FacultyEmail
                 });
                 this.aptDetails.push({
                     start: this.aptSrv.fmtDate(st),
                     end: this.aptSrv.fmtDate(endTime),
                     id: apt.ID,
-                    professor: apt.FacultyID,
-                    student: apt.StudentID,
+                    professor: apt.FacultyLastName + ", " + apt.FacultyFirstName,
+                    professorID: apt.FacultyID,
+                    student: apt.StudentLastName + ", " + apt.StudentFirstName,
+                    studentID: apt.StudentID,
                     location: loc,
-                    duration: (apt.Duration * 60)
+                    duration: (apt.Duration * 60),
+                    studentEmail: apt.StudentEmail,
+                    facultyEmail: apt.FacultyEmail
                 });
             }
             console.log(this.events);
@@ -106,7 +118,8 @@ eventClicked(args: any): void {
               start: st,
               end: et,
               title: "Appointment",
-              faculty: "yo mama",
+              faculty: this.data.professor,
+              student: this.data.student,
               status: (this.data.student ? "Scheduled" : "Available"),
               location: this.data.location ? this.data.location : "(unspecified)",
               view: 'view'

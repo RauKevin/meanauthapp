@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-help',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HelpComponent implements OnInit {
 
-  constructor() { }
+  constructor(public authSrv: AuthService) { }
+
+  name: string;
+  email: string;
 
   ngOnInit() {
+    let user = this.authSrv.getUser();
+    this.name = user.FirstName.trim() + " " + user.LastName.trim();
+    this.email = user.Email.trim();
+  }
+
+  onSubmit() {
+    alert("You ticket has been submitted. A Torro team staff member will contact you shortly.");
   }
 
 }

@@ -150,7 +150,6 @@
                             start: new Date(st),
                             end: endTime,
                             title: " ID# "+apt.ID+', Room '+apt.Location,
-                            cssClass: 'cal-event-available',
                             color: color,
                             actions: this.actions,
                             id: apt.ID,
@@ -294,7 +293,6 @@
                                     start: st,
                                     end: endTime,
                                     title: 'Room '+apt.Location,
-                                    cssClass: 'cal-event-available',
                                     color: color,
                                     actions: this.actions,
                                     id: apt.ID,
@@ -315,7 +313,6 @@
     }
 
     private addSelectedDayViewClass() {
-        //console.log(this.hourColumns);
         this.hourColumns.forEach((column) => {
             column.hours.forEach((hourSegment) => {
                 hourSegment.segments.forEach((segment) => {
@@ -323,19 +320,12 @@
                 
                 if (this.aptDatesSet.has(segment.date.getTime())) {
                     segment.cssClass = 'cal-day-selected'; //not relevant
-                    // console.log('Segment');
-                    // console.log(segment);
-                    // console.log(typeof segment);
                 }
 
                 //part of deleted group
                 if (this.canceledDatesSet.has(segment.date.getTime())) {
                     segment.cssClass = 'cal-event-removed';
                 }
-
-                //Add segment identifier to array of selected items
-                //if click once, select, again unselecta nd remove from list
-
 
                 });
             });
