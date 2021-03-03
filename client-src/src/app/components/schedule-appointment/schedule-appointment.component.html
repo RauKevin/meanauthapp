@@ -3,7 +3,6 @@
 </div>
 <div class="row">
   <div class="col-md-4 form-group" style="padding: 1.5em;">
-
     <label for="professors">Faculty: </label>
     <select class="form-control" id="professors" [(ngModel)]="selectedFaculty" (change)="facultyChange()">
       <option value=""></option>
@@ -60,7 +59,7 @@
     </ng-template>
     
   </div>
-  <!-- Change header for this view -->
+
   <div class="col-md-8" style="padding: 2em; border: 1px solid black">
     <app-schedule
       [events]="events"

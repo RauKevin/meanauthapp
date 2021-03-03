@@ -5,15 +5,13 @@ import {
   Input,
   OnInit
 } from '@angular/core';
-import { CalendarEvent, CalendarView, CalendarWeekViewBeforeRenderEvent, CalendarEventAction } from 'angular-calendar';
-import { addDays, addHours, startOfDay } from 'date-fns';
-import { WeekViewHour, WeekViewHourColumn } from 'calendar-utils';
+import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { Modal } from '../../modals/modal';
 import { AppointmentService } from 'src/app/services/appointment.service';
 
-export interface calEventX extends CalendarEvent {
+interface calEventX extends CalendarEvent {
   id: string,
   professor: string,
   student: string,
@@ -28,35 +26,27 @@ export interface calEventX extends CalendarEvent {
 })
 export class ScheduleComponent {
 
-  constructor(public dialog: MatDialog, public aptSrv: AppointmentService,) { }
+  constructor(public dialog: MatDialog, public aptSrv: AppointmentService) { }
 
   @Input() notifier: Subject<any>;
+  @Input() eventClicked: (args: any) => void;
+  @Input() events: calEventX[] = [];
+
+  view: CalendarView = CalendarView.Week;
+  viewDate: Date = new Date();
+  hourBlock: Number = 2;
+  refresh: Subject<any> = new Subject();
 
   ngOnInit() {
     this.notifier.subscribe(data => {
-      console.log(data);
-      console.log("refreash table!");
       this.refreshView();
     });
   }
-
-  view: CalendarView = CalendarView.Week;
-
-  viewDate: Date = new Date();
-
-  hourBlock: Number = 2;
-
-  refresh: Subject<any> = new Subject();
 
   refreshView(): void {
     this.refresh.next();
   }
 
-  @Input() events: calEventX[] = [];
-
   beforeWeekOrDayViewRender() {
-    console.log("beforeWeekOrDayViewRender");
-  }
-
-  @Input() eventClicked: (args: any) => void;
+  }  
 }

@@ -10,6 +10,7 @@ export class AuthService {
   authToken:any;
   user:any;
   userType:any = null;
+  isloggedIn: boolean = null;
 
   constructor(private http:HttpClient) { }
 
@@ -17,7 +18,6 @@ export class AuthService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
-        //'Authorization': 'my-auth-token'
       })
     };
 
@@ -25,26 +25,13 @@ export class AuthService {
   }
 
   authenticateUser(user) {
-    console.log(user);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post('http://localhost:3000/api/auth', user, httpOptions);
-  }
 
-  getProfile() {
-    this.loadToken();
-    console.log(this.authToken);
-    console.log(typeof this.authToken);
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        'Authorization': this.authToken
-      })
-    };
-    //return this.http.get('http://localhost:3000/users/profile', httpOptions);  
+    return this.http.post('http://localhost:3000/api/auth', user, httpOptions);
   }
 
   loadToken() {
@@ -53,29 +40,22 @@ export class AuthService {
   }
 
   storeUserData(token: any, user: any): any {
-    console.log(typeof token);
     localStorage.setItem('id_token', token); 
     localStorage.setItem('user', JSON.stringify(user));
     this.authToken = token;
     this.user = user;
   }
 
-  /**
-   * You need to fix the logged in view. 
-   * Leaving the site and returning shows you are loggedIn but view have both logged in and out stuff
-   */
   loggedIn() {
-    //return tokenNotExpired();
-    //localStorage.clear();
+    // if (this.isloggedIn != null) {
+    //   return this.isloggedIn;
+    // }
+
     const myRawToken = localStorage.getItem('id_token');
-    // console.log(myRawToken);
     const helper = new JwtHelperService();
-    if(myRawToken)
-    {
-      //return true;
+    if (myRawToken) {
       const isExpired = helper.isTokenExpired(myRawToken);
-      if(!isExpired)
-      {
+      if (!isExpired) {
         return true;
       }
     }
@@ -98,28 +78,24 @@ export class AuthService {
       this.user = JSON.parse(user);
       return this.user;
     }
-    
+
     return null;
-    //need a way to tell if faculty or student
   }
 
-  //WHY is this called a million times
   getType() : string {
     if (this.userType) {
       return this.userType;
     }
+
     const currentUser = this.getUser();
     if (currentUser) {
-      console.log(currentUser.FacultyID); //FacultyID
-      console.log(typeof currentUser.FacultyID);
-      console.log(currentUser.StudentID); //StudentID
-      console.log(typeof currentUser.StudentID);
       if (currentUser.FacultyID) {
         this.userType = 'faculty';
       } else if (currentUser.StudentID) {
         this.userType = 'student';
       }
     }
+
     return this.userType;
   }
 

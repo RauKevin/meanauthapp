@@ -8,7 +8,6 @@ import { CommonModule } from '@angular/common';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-//import { DemoUtilsModule } from '../demo-utils/module';
 
 /*Components*/
 import { AppRoutingModule } from './app-routing.module';
@@ -16,7 +15,6 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
@@ -26,17 +24,11 @@ import { AuthService } from './services/auth.service';
 import { AppointmentService } from './services/appointment.service';
 import { NgFlashMessagesModule } from 'ng-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
-import { FacultyGuard } from './guards/faculty.guard';
 import { CalenderComponent } from './components/calender/calender.component';
 import { CalenderHeaderComponent } from './components/calender-header/calender-header.component';
-import { ModalTestComponent } from './components/modal-test/modal-test.component';
-
-//Do I really need a new modal for every type?
 import { Modal } from './modals/modal';
-
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { MakeAppointmentComponent } from './components/make-appointment/make-appointment.component';
 import { ViewAppointmentComponent } from './components/view-appointment/view-appointment.component';
 import { ScheduleAppointmentComponent } from './components/schedule-appointment/schedule-appointment.component';
 import { ScheduleComponent } from './components/schedule/schedule.component';
@@ -49,15 +41,12 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
     NavbarComponent,
     LoginComponent,
     RegisterComponent,
-    HomeComponent,
     DashboardComponent,
     ProfileComponent,
     CalenderComponent,
     CalenderHeaderComponent,
-    ModalTestComponent,
     Modal,
     SidebarComponent,
-    MakeAppointmentComponent,
     ViewAppointmentComponent,
     ScheduleAppointmentComponent,
     ScheduleComponent,
@@ -78,7 +67,7 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
     }),
     MatDialogModule
   ],
-  providers: [ValidateService, AuthService, AuthGuard, FacultyGuard, AppointmentService],
+  providers: [ValidateService, AuthService, AuthGuard, AppointmentService],
   bootstrap: [AppComponent],
   entryComponents: [ Modal ]
 })

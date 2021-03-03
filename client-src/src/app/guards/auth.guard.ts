@@ -13,22 +13,8 @@ export class AuthGuard implements CanActivate {
         if(this.authService.loggedIn()) {
             return true;
         } else {
-            this.router.navigate(['/welcome']);
+            this.router.navigate(['/']);
             return false;
         }
     }
-
-    // studentOnly() {
-    //     const type = this.authService.getType();
-    //     return type === 'student';
-    // }
-
-    // facultyOnly() {
-    //     const type = this.authService.getType();
-    //     if (type === 'faculty') {
-    //         this.router.navigate(['/generate']);
-    //         return true;
-    //     }
-    //     return false;
-    // }
 }

@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Modal } from '../../modals/modal';
 import { AppointmentService } from '../../services/appointment.service';
-import { CalendarEvent, CalendarView, CalendarWeekViewBeforeRenderEvent, CalendarEventAction } from 'angular-calendar';
+import { CalendarEvent, CalendarEventAction } from 'angular-calendar';
 import { Subject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
-export interface calEventX extends CalendarEvent {
+interface calEventX extends CalendarEvent {
   id: string,
   professor: string,
   professorID: string,
@@ -37,11 +37,8 @@ export class ViewAppointmentComponent implements OnInit {
   aptDetails: any[] = [];
 
   ngOnInit() {
-    console.log("This is the beginning!");
     const u = this.authSrv.getUser();
-    console.log(u);
     this.userType = this.authSrv.getType();
-    console.log(this.userType);
     const aptData: any = {};
     if ('StudentID' in u && this.userType === "student") {
       this.studentID = u.StudentID;
@@ -51,17 +48,13 @@ export class ViewAppointmentComponent implements OnInit {
       aptData.FacultyID = u.StudentID;
     }
     if (Object.keys(aptData).length === 0) {
-      console.log("Bad user");
       return;
     }
 
     this.aptSrv.getAppointments(aptData).subscribe(data => {
-        //console.log(data);
         this.data = data;
         if ('appointments' in data) {
-            //if array
-            console.log(typeof this.data.appointments);
-            //if length > 1 
+            //if array and if length > 1 
             for (const apt of this.data.appointments) {
                 if (!apt.StudentID) {
                   continue;
@@ -100,39 +93,35 @@ export class ViewAppointmentComponent implements OnInit {
                     facultyEmail: apt.FacultyEmail
                 });
             }
-            console.log(this.events);
         }
         this.childNotifier.next(null);
     });
 }
 
 eventClicked(args: any): void {
-  console.log("Event clicked schedule apt.");
-  console.log(args);
   if ('event' in args) {
-      this.data = args.event;
-      let st = this.aptSrv.fmtDate(this.data.start);
-      let et = this.aptSrv.fmtDate(this.data.end);
-      const dialogRef = this.dialog.open(Modal, {
-          data: {
-              start: st,
-              end: et,
-              title: "Appointment",
-              faculty: this.data.professor,
-              student: this.data.student,
-              status: (this.data.student ? "Scheduled" : "Available"),
-              location: this.data.location ? this.data.location : "(unspecified)",
-              view: 'view'
-          }
-      });
+    this.data = args.event;
+    let st = this.aptSrv.fmtDate(this.data.start);
+    let et = this.aptSrv.fmtDate(this.data.end);
+    this.dialog.open(Modal, {
+        data: {
+            start: st,
+            end: et,
+            title: "Appointment",
+            faculty: this.data.professor,
+            student: this.data.student,
+            status: (this.data.student ? "Scheduled" : "Available"),
+            location: this.data.location ? this.data.location : "(unspecified)",
+            view: 'view'
+        }
+    });
   }
 }
 
 cancelAppointment(id) {
   if (!id) {
-    id = 5;
+    return alert("Unable to cancel appointment at this time.");
   }
-  console.log("Cancel "+id);
   let event = null; 
   for (const evt of this.events) {
     if (evt.id === id) {
@@ -141,7 +130,7 @@ cancelAppointment(id) {
     }
   }
   if (!event) {
-    return;
+    return alert("Unable to cancel appointment at this time.");
   }
 
   let st = this.aptSrv.fmtDate(event.start);
@@ -151,16 +140,14 @@ cancelAppointment(id) {
           start: st,
           end: et,
           title: "Appointment",
-          faculty: "yo mama",
-          location: this.data.location ? this.data.location : "(unspecified)",
+          faculty: event.professor,
+          location: event.location ? event.location : "(unspecified)",
           view: 'cancel'
       }
   });
   dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.aptSrv.cancelAppointment(id).subscribe(data => {
-          console.log(data);
-
           //remove from event array
           this.events = this.events.filter((evt) => {
             return id !== evt.id;

@@ -6,7 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { CalendarEvent, CalendarEventAction } from 'angular-calendar';
 import { Subject } from 'rxjs';
 
-export interface calEventX extends CalendarEvent {
+interface calEventX extends CalendarEvent {
   id: string,
   professor: string,
   student: string,
@@ -14,13 +14,13 @@ export interface calEventX extends CalendarEvent {
   duration: number
 }
 
-export interface Faculty {
+interface Faculty {
     FacultyID: string,
     FirstName: string,
     LastName: string
 }
 
-export interface DateExt {
+interface DateExt {
     eventID: string,
     d: string,
     t: string,
@@ -45,24 +45,20 @@ selectedTime: string;
 faculty: Faculty[];
 selectedFaculty: string = "";
 availableDates: DateExt[] = [];
-availableDatesSet = new Set(); //need to use this to populate dates
+availableDatesSet = new Set();
 noApts: boolean = false;
 aptDetails: any;
 studentID: string;
-
 childNotifier : Subject<any> = new Subject<any>();
 
 ngOnInit() {
-    console.log("This is the beginning! [ScheduleAppointmentComponent]");
     const u = this.authSrv.getUser();
-    console.log(u);
     if ('StudentID' in u) {
         this.studentID = u.StudentID;
     }
 
     //get available faculty.
     this.aptSrv.getFaculty().subscribe(data => {
-        console.log(data);
         this.data = data;
         this.faculty = [];
         if (this.data.success) {
@@ -73,16 +69,11 @@ ngOnInit() {
                     LastName: f.LastName.trim()
                 });
             }
-            console.log("Faculty length: "+this.faculty.length);
         }
     });
-    console.log("Selected Faculty");
-    console.log(this.selectedFaculty);
 }
 
-//this is called from schedule component so it needs the aptSrv?
 eventClicked(args: any): void {
-    console.log("Event clicked schedule apt.");    
     if ('event' in args) {
         this.data = args.event;
         let st = this.aptSrv.fmtDate(this.data.start);
@@ -101,29 +92,18 @@ eventClicked(args: any): void {
 }
 
 getAppointments(facultyID) {
-    console.log("Get Appointments");
     this.aptSrv.getAppointments({
         FacultyID: facultyID,
         Open: true
     }).subscribe(data => {
-        //console.log(data);
         this.data = data;
         if ('appointments' in data) {
-            //if array
-            console.log(this.data.appointments);
-            //if length > 1 
-
-            // you can also filter out apts that are after hours
-
             for (const apt of this.data.appointments) {
                 let st = new Date(apt.StartTime);
                 st.setHours(st.getHours() - st.getTimezoneOffset()/60);
                 let endTime = new Date(st);
                 endTime.setMinutes(endTime.getMinutes() + (apt.Duration * 60));
-                console.log(apt.StartTime);
-                console.log(apt.StartTime.toString());
 
-                //if Status = 'Available'
                 if (st.getTime() <= Date.now()) {
                     continue;
                 }
@@ -142,7 +122,6 @@ getAppointments(facultyID) {
                 });
 
                 const dateFormated = this.aptSrv.fmtDate(st, "date");
-                
                 this.availableDates.push({
                     eventID: apt.ID,
                     d: dateFormated,
@@ -151,8 +130,6 @@ getAppointments(facultyID) {
                 });
                 this.availableDatesSet.add(dateFormated);
             }
-            console.log(this.events);
-            console.log(this.availableDates); //might not even need this set
             this.childNotifier.next(null);
         }
         if (this.availableDates.length < 1) {
@@ -163,8 +140,6 @@ getAppointments(facultyID) {
 
 facultyChange() {
     this.noApts = false;
-    console.log("Faculty Change");
-    console.log(this.selectedFaculty);
     this.events = [];
     this.availableDates = [];
     this.availableDatesSet.clear();
@@ -178,8 +153,6 @@ facultyChange() {
 }
 
 dateChange() {
-    console.log("Day changed");
-    console.log(this.selectedDay);
     this.availableTimes = [];
     this.selectedTime = "";
     for (const dt of this.availableDates) {
@@ -191,8 +164,6 @@ dateChange() {
 }
 
 timeChange() {
-    console.log("Time changed");
-    //console.log(this.selectedTime);
     this.loadAvailableApts();
 }
 
@@ -241,8 +212,6 @@ loadAvailableApts() {
 }
 
 scheduleApt(aptId) {
-    console.log("schedule this!");
-    console.log(aptId);
     let event;
     for (const ev of this.events) {
         if (aptId === ev.id) {
@@ -269,30 +238,21 @@ scheduleApt(aptId) {
                 this.schedule(aptId); //or event.id
             }
         });
-
-        //dialog close if confirm then aptService schedule appointment.
-
-        //this.aptSrv.scheduleAppointment();
     }
 }
 
 schedule(id) {
     if (id) {
         this.aptSrv.scheduleAppointment(id, this.studentID).subscribe(data => {
-            console.log("Schedule Appointment response");
-            console.log(data);
-            this.data = data; //angualr is a pain
+            this.data = data;
             if (this.data.success) {
                 alert(this.data.msg);
-
-                //either navigate to view appointments or show success in flash and update events
                 this.events = this.events.filter((evt) => {
                     return id !== evt.id;
                 });
                 this.aptDetails = this.aptDetails.filter((apt) => {
                     return id !== apt.id;
                 });
-
             } else {
                 alert("No luck, try again later?");
             }

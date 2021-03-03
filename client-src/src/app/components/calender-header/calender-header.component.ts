@@ -12,7 +12,6 @@ export class CalenderHeaderComponent {
 
   @Input() locale: string = 'en';
 
-  //take in a boolean param to display te appointment length
   @Input() hourBlock: number = 2;
 
   @Input() hourBlockToggle: boolean = false;
@@ -24,5 +23,4 @@ export class CalenderHeaderComponent {
   @Output() viewDateChange = new EventEmitter<Date>();
 
   CalendarView = CalendarView;
-
 }

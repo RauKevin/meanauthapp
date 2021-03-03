@@ -10,6 +10,4 @@ export class AppComponent {
   constructor(
     private authService:AuthService,
     ) {}
-  
-  title = 'client-src';
 }

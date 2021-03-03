@@ -23,16 +23,12 @@ export class LoginComponent implements OnInit {
   }
 
   onLoginSubmit() {
-    console.log(this.email + ' login attempt');
     const user = {
       Email: this.email,
       Password: this.password
     };
 
-    //not going to validate here? ok
-
     this.authService.authenticateUser(user).subscribe(data => {
-      console.log(data);
       this.data = data;
       if (this.data.success) {
         this.authService.storeUserData(this.data.token, this.data.user);
@@ -43,11 +39,8 @@ export class LoginComponent implements OnInit {
           timeout: 3000,
           type: 'success'
         });
-        console.log(window.location.origin);
-        //window.location.href="yourpagedomain/login"
         window.location.href=window.location.origin+"/dashboard";
         //this.router.navigate(['/dashboard']);
-        console.log("operation after routing?");
       } else {
         this.ngFlashMessageService.showFlashMessage({
           messages: [this.data.msg], 
@@ -55,10 +48,8 @@ export class LoginComponent implements OnInit {
           timeout: 3000,
           type: 'danger'
         });
-        this.router.navigate(['/login']); //redundant?
-
+        this.router.navigate(['/login']);
       }
     });
   }
-
 }

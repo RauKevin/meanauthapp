@@ -25,14 +25,10 @@ export class NavbarComponent implements OnInit {
       this.lastname = 'LastName' in user ? user.LastName.trim() : "";
       this.firstname = 'FirstName' in user ? user.FirstName.trim() : "";
     }
-
     const userType = this.authService.getType();
-    console.log("User Type: " + userType);
   }
 
-  //HOW do i refreash after logout so a switch user cant see the other login name
-
-  onLogoutClick(){
+  onLogoutClick() {
     this.authService.logout();
     this.ngFlashMessageService.showFlashMessage({
       messages: ['You are now logged out'], 

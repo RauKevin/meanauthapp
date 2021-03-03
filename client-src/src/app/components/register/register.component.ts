@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ValidateService } from '../../services/validate.service';
 import { NgFlashMessageService } from 'ng-flash-messages';
 import { AuthService } from '../../services/auth.service';
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
 
   firstname: string;
   lastname: string;
@@ -26,12 +26,8 @@ export class RegisterComponent implements OnInit {
     private router:Router
     ) { }
 
-  ngOnInit() {
-  }
-
   onRegisterSubmit()
   {
-    console.log("registration submit event activated");
     let user = {
       FirstName: this.firstname,
       LastName: this.lastname,
@@ -42,11 +38,9 @@ export class RegisterComponent implements OnInit {
       StudentID: null,
       FacultyID: null,
     };
-    console.log(user);
 
     //required fields
     if (!this.validateService.validateRegister(user)) {
-      console.log('Please complete all fields to register');
       this.ngFlashMessageService.showFlashMessage({
         messages: ["Please complete all fields to register"], 
         dismissible: true, 
@@ -56,7 +50,6 @@ export class RegisterComponent implements OnInit {
       return false;
     }
     if (!this.validateService.validateEmail(user.Email)) {
-      console.log('Please enter a valid email');
       this.ngFlashMessageService.showFlashMessage({
         messages: ['Please enter a valid email'], 
         dismissible: true, 
@@ -92,9 +85,5 @@ export class RegisterComponent implements OnInit {
         });
       }
     });
-
   }
-
-  
-
 }
