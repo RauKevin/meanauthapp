@@ -9,15 +9,17 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ScheduleAppointmentComponent } from './components/schedule-appointment/schedule-appointment.component';
 import { ViewAppointmentComponent } from './components/view-appointment/view-appointment.component';
 import { CalenderComponent } from './components/calender/calender.component';
+import { HomeComponent } from './components/home/home.component';
+import { HelpComponent } from './components/help/help.component';
 
 /* Service imports */
 import { AuthGuard } from './guards/auth.guard';
-import { HelpComponent } from './components/help/help.component';
 
 const routes: Routes = [
+  {path:'', component: HomeComponent},
   {path:'register', component: RegisterComponent},
   {path:'login', component: LoginComponent},
-  {path:'', component: DashboardComponent, canActivate:[AuthGuard]},
+  // {path:'', component: DashboardComponent, canActivate:[AuthGuard]},
   {path:'dashboard', component: DashboardComponent, canActivate:[AuthGuard]},
   {path:'profile', component: ProfileComponent, canActivate:[AuthGuard]},
   {path:'generate', component: CalenderComponent, canActivate:[AuthGuard]},

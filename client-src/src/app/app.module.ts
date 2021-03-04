@@ -34,6 +34,7 @@ import { ScheduleAppointmentComponent } from './components/schedule-appointment/
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { HelpComponent } from './components/help/help.component';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
     ScheduleAppointmentComponent,
     ScheduleComponent,
     HelpComponent,
-    ForbiddenComponent
+    ForbiddenComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

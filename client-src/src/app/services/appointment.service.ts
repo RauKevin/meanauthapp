@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class AppointmentService {
 
     constructor(private http:HttpClient) { }
+    base_url: string = window.location.origin;
 
     fmtAppointment(date:Date, duration:number) : string {
         let date2 = new Date(date);
@@ -57,7 +58,7 @@ export class AppointmentService {
             AppointmentID: aptID
         };
 
-        return this.http.post('http://localhost:3000/api/cancelAppointment', data, httpOptions);
+        return this.http.post(this.base_url+'/api/cancelAppointment', data, httpOptions);
     }
 
     scheduleAppointment(aptID, studentID) {
@@ -71,7 +72,7 @@ export class AppointmentService {
             StudentID: studentID
         };
 
-        return this.http.post('http://localhost:3000/api/setAppointment', data, httpOptions);
+        return this.http.post(this.base_url+'/api/setAppointment', data, httpOptions);
     }
 
     getAppointments(params) {
@@ -92,7 +93,7 @@ export class AppointmentService {
             })
         };
 
-        return this.http.post('http://localhost:3000/api/getAppointments', data, httpOptions);
+        return this.http.post(this.base_url+'/api/getAppointments', data, httpOptions);
     }
 
     postAvailability(dateTimes:Set<any>, removedDT: any[], facultyID:string, duration:Number, room:string): any {
@@ -131,7 +132,7 @@ export class AppointmentService {
                 })
             };
 
-            return this.http.post('http://localhost:3000/api/createAppointments', apts, httpOptions);
+            return this.http.post(this.base_url+'/api/createAppointments', apts, httpOptions);
         }
     }
 
@@ -142,6 +143,6 @@ export class AppointmentService {
             })
         };
 
-        return this.http.post('http://localhost:3000/api/faculty', {}, httpOptions);
+        return this.http.post(this.base_url+'/api/faculty', {}, httpOptions);
     }
 }

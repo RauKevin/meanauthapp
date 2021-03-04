@@ -7,8 +7,7 @@
 }
 
 #entry {
-    background-image: url("https://pbs.twimg.com/media/EU3DTpiUYAEGu1-.jpg");
-    min-height: 100vh; /*change to match background image height*/
+    background-image: url("/assets/csudh-library.jpg");
     background-repeat: repeat-x;
     /* background-color: #424242; */
 }

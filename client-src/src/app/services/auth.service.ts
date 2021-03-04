@@ -11,6 +11,7 @@ export class AuthService {
   user:any;
   userType:any = null;
   isloggedIn: boolean = null;
+  base_url: string = window.location.origin;
 
   constructor(private http:HttpClient) { }
 
@@ -21,7 +22,7 @@ export class AuthService {
       })
     };
 
-    return this.http.post('http://localhost:3000/api/register', user, httpOptions);  
+    return this.http.post(this.base_url+'/api/register', user, httpOptions);  
   }
 
   authenticateUser(user) {
@@ -31,7 +32,7 @@ export class AuthService {
       })
     };
 
-    return this.http.post('http://localhost:3000/api/auth', user, httpOptions);
+    return this.http.post(this.base_url+'/api/auth', user, httpOptions);
   }
 
   loadToken() {
