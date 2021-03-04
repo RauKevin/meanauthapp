@@ -95,3 +95,5 @@ Create App Steps
     -  In angular.json "outputPath": "../public",
     - ng build, then you can navigate to the local host port of the server and complete your app
 
+14. build for provid
+ng build --prod --aot=false --build-optimizer=false
