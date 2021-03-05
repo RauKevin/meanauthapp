@@ -2,12 +2,18 @@ const { Client, Pool } = require('pg');
 
 //const pool = new Pool();
 //const client = await pool.connect();
+// const client = new Client({
+//     user: "postgres",
+//     host: "localhost",
+//     database: "toro",
+//     password: "password",
+//     port: 5432 //3188
+// });
 const client = new Client({
-    user: "postgres",
-    host: "localhost",
-    database: "toro",
-    password: "password",
-    port: 5432 //3188
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
 });
 
 const pgClientConnect = function () {
