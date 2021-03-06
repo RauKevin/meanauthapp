@@ -60,7 +60,7 @@ export class ViewAppointmentComponent implements OnInit {
                   continue;
                 }
                 let st = new Date(apt.StartTime);
-                st.setHours(st.getHours() - st.getTimezoneOffset()/60);
+                st.setHours(st.getHours() + st.getTimezoneOffset()/60);
                 let endTime = new Date(st);
                 endTime.setMinutes(endTime.getMinutes() + (apt.Duration * 60));
                 const loc = apt.Location.trim() ? apt.Location.trim() : "(unspecified)"

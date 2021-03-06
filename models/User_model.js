@@ -5,7 +5,10 @@ const jwt = require('jsonwebtoken');
 
 module.exports.registerUser = function (user, cb) {
     const salt = bcrypt.genSaltSync(10);
+    console.log(salt);
     const hash = bcrypt.hashSync(user.Password, salt);
+    console.log(hash);
+
     const values = [
         user.Email, 
         ('StudentID' in user ? user.StudentID : null), 
@@ -19,8 +22,11 @@ module.exports.registerUser = function (user, cb) {
         VALUES ($1, $2, $3, $4, $5, $6) 
         RETURNING "User"."ID", "User"."Email", "User"."StudentID", "User"."FacultyID";
     `;
+    console.log(query);
 
     client.query(query, values).then(res => {
+        console.log("query is back");
+        console.log(res);
         cb(res.rows, null);
     }).catch(e => {
         cb(null, e);
