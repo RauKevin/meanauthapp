@@ -23,7 +23,7 @@ export class AuthService {
     };
 
     //return this.http.post(this.base_url+'/api/register', user, httpOptions);
-    return this.http.post('localhost:3000/api/register', user, httpOptions);  
+    return this.http.post(this.base_url+'/api/register', user, httpOptions);  
   }
 
   authenticateUser(user) {
