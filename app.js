@@ -8,7 +8,7 @@ const api = require('./routes/api');
 const db = require('./dbConnect');
 
 //connect to db - switch to pooling?
-//db.pgClientConnect();
+db.pgClientConnect();
 //https://node-postgres.com/api/client
 
 
