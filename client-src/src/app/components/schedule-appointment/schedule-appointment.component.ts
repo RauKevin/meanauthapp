@@ -100,7 +100,7 @@ getAppointments(facultyID) {
         if ('appointments' in data) {
             for (const apt of this.data.appointments) {
                 let st = new Date(apt.StartTime);
-                st.setHours(st.getHours() + st.getTimezoneOffset()/60);
+                //st.setHours(st.getHours() + st.getTimezoneOffset()/60);
                 let endTime = new Date(st);
                 endTime.setMinutes(endTime.getMinutes() + (apt.Duration * 60));
 
