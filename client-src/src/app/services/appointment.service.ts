@@ -104,7 +104,7 @@ export class AppointmentService {
             for (const dt of Array.from(dateTimes.values())) {
                 //let date = new Date(dt).toISOString();
                 let st = new Date(dt);
-                st.setHours(st.getHours() - st.getTimezoneOffset()/60);
+                //st.setHours(st.getHours() - st.getTimezoneOffset()/60);
                 let date = st.toISOString(); //this adds 8hs?
                 apts.push({
                     Location: room,
